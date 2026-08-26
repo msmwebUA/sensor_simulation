@@ -1,0 +1,33 @@
+### Main window:
+
+- 3K logo
+- Main block rpm (numfield)
+- Coefficients (% or common fraction: 1/2 etc) (4 numfields, for each axis). Parse and validate in code
+- Rpm per sensor (4 numfields, auto count / refresh when coefficients changed)
+- Settings btn
+- Start/Stop simulation btn
+- Info region (disabled text area) (console for messages (rpm per sensor etc) as QPlainTextEdit) 
+
+### Settings (dialog window):
+
+- GPIO pins (4 numfields)
+- Default rpm per sensor (4 numfields)
+- Save btn (read/write to txt file)
+
+### Validate values (only numbers)
+
+### Errors to alert window
+
+
+### Update system date and time before install python requirements
+
+### Install emojis pkg:
+  sudo apt update
+  sudo apt install fonts-noto-color-emoji -y
+
+-----------
+### Command to create ui from ui file:
+pyside6-uic ui/mainwin.ui -o ui.py
+
+### Compile static resources into py file:
+pyside6-rcc ui/resources.qrc -o resources_rc.py
