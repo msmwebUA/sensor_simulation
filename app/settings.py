@@ -4,7 +4,7 @@ class Settings:
   def __init__(self):
     self.settings_file = "settings.json"
     self.saved_settings, self.current_settings = self.loadSettings()
-    self.current_config_id = 0
+    self.current_config_id = self.getCurrentConfigId(self.saved_settings)
   
   def loadSettings(self) -> dict:
     if not os.path.exists(self.settings_file):
@@ -46,7 +46,7 @@ class Settings:
   
   def validateSettings(self, settings: dict) -> bool:
     return False
-    
+
   def saveSettings(self) -> None:
     if self.validateSettings(self.modified_settings):
       # TODO fix structure of JSON
@@ -88,7 +88,15 @@ class Settings:
     else:
       # TODO show error message and prevent dialog closing
       pass
+
+  def getCurrentConfigId(self, settings: dict) -> str:
+    for key, value in settings.items():
+      if value["current"]:
+        return key
   
+  def setCurrentConfigId(self, settings: dict, config_id: str) -> None:
+    settings[config_id]["current"] = True
+
   def createConfigExample(self) -> dict:
     return {
       "1": {
