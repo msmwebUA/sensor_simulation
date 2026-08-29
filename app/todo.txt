@@ -11,6 +11,8 @@
 
 ### Old machine and new machine select list and own settings
 
+### Suggest to save current settings to file on program exit
+
 ### Settings (dialog window):
 
 - GPIO pins (4 numfields)
