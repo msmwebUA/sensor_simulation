@@ -1,55 +1,45 @@
-# variant with transistor
-
+import json
 from gpiozero import DigitalOutputDevice
-from signal import pause
 
-# rpm per sensor
-RPM_SETTINGS = {
-    "s1": 200,   
-    "s2": 300, 
-    "s3": 400,
-    "s4": 500,
-}
-
-# gpio
-SENSORS = {
-    "s1": 27,
-    "s2": 22,  
-    "s3": 23,  
-    "s4": 24,  
-}
-
-# keeps sensors as objects
-channels = {}
+settings_file = "settings.json"
 
 def main():
-    print("Running simulation...")
-    for sensor, pin in SENSORS.items():
-        rpm = RPM_SETTINGS[sensor]
-        channel = DigitalOutputDevice(pin, active_high=True, initial_value=True)
-        channels[sensor] = channel
+    consoleMessage("Running simulation...")
+    # load settings
+    try:
+        with open(settins_file, "r", encoding="utf-8") as f:
+            settings = json.load(f)
+        consoleMessage(f"Settings loaded from file {settings_file}")
+    except FileNotFoundError:
+        consoleMessage(f"Settings file not found: {settings_file}")
+    except json.JSONDecodeError:
+        consoleMessage(f"Settings file {settings_file} corrupted")
+    except Exception as e:
+        consoleMessage(f"Error loading settings: {e}")
+
+    channels = {}
+    # sensors as dict
+    sensors = settings["sensors"]
+    for sensor in sensors:
+        rpm = sensor["rpm"]
+        channel = DigitalOutputDevice(sensor["gpio"], active_high=True, initial_value=True)
+        # keep gpio pin's mode as object otherwise it will be collected to garbage in next iteration
+        channels[sensor["id"]] = channel
         if rpm > 0:
             frequency = rpm / 60.0
             # time for active low and high
             half_period = (1.0 / frequency) / 2.0
             # run built-in blink method, infinite
-            # RPI HIGH -> controller's 5V + pull-up closed to GND through transistor
-            # RPI LOW -> 5V disconnected from GND
+            # RPI LOW -> pin closed to GND
+            # RPI HIGH -> pin switched to 
             channel.blink(on_time=half_period, off_time=half_period, background=True)
-            print(f"[{sensor}], GPIO{pin} -> {rpm} RPM (half period: {half_period:.4f} s)")
+            consoleMessage(f"[sensor{sensor['id']}], GPIO{pin} -> {rpm} RPM (half period: {half_period:.4f} s)")
         else:
             channel.off()
-            print(f"[{sensor}], GPIO{pin} -> Stopped (0 RPM)")
+            consoleMessage(f"[sensor{sensor['id']}], GPIO{pin} -> Stopped (0 RPM)")
 
-    print("\nPress Ctrl+C for exit")
-
-    try:
-        pause()  # keeps script running
-    except KeyboardInterrupt:
-        print("\nSimulation stopped")
-    finally:
-        for channel in channels.values():
-            channel.close()
+        # for channel in channels.values():
+        #     channel.close()
 
 if __name__ == "__main__":
     main()
