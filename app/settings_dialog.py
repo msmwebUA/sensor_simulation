@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QDialog
 from ui_settings_dialog import Ui_settingsDialog
+import messages
 
 class SettingsDialog(QDialog, Ui_settingsDialog):
   def __init__(self, settings_obj, parent=None):
@@ -70,8 +71,7 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
       # TODO rename config in self.modified_settings
       pass
     else:
-      # TODO show error message
-      pass
+      messages.showAlert(self, "Error", "Cannot create or update config name", "critical")
   
   def deleteConfig(self) -> None:
     # TODO delete config from self.modified_settings

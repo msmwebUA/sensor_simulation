@@ -1,9 +1,10 @@
 # import UI
-from PySide6.QtWidgets import QMainWindow, QMessageBox, QApplication
+from PySide6.QtWidgets import QMainWindow, QApplication
 from PySide6.QtCore import Qt, QElapsedTimer, QDateTime
 from ui import Ui_MainWindow
 from settings_dialog import SettingsDialog
 from settings import Settings
+import messages
 
 import json
 from gpiozero import DigitalOutputDevice
@@ -24,8 +25,9 @@ class App(QMainWindow, Ui_MainWindow):
     # set first stackedWidget page
     self.stackedWidget.setCurrentIndex(0)
     
-    # init settings object
+    # init objects
     self.settings_obj = Settings()
+    messages.ConsoleLogger.setWidget(self.consoleText)
 
     # show, hide or set items
     self.hideSensorControlButtons()
@@ -44,7 +46,7 @@ class App(QMainWindow, Ui_MainWindow):
     self.elapsed_timer = QElapsedTimer()
 
     # print version to console
-    self.consoleMessage(f"3K Sensor simulation: version {VERSION}")
+    messages.ConsoleMessage.append(f"3K Sensor simulation: version {VERSION}")
 
     # add listener to program exit and purge channels
       # self.purgeChannels()
@@ -70,13 +72,13 @@ class App(QMainWindow, Ui_MainWindow):
           # RPI LOW -> pin closed to GND
           # RPI HIGH -> pin switched to 
           channel.blink(on_time=half_period, off_time=half_period, background=True)
-          self.consoleMessage(f"[sensor{sensor['id']}], GPIO{pin} -> {rpm} RPM (half period: {half_period:.4f} s)")
+          messages.ConsoleMessage.append(f"[sensor{sensor['id']}], GPIO{pin} -> {rpm} RPM (half period: {half_period:.4f} s)")
         else:
           channel.off()
-          self.consoleMessage(f"[sensor{sensor['id']}], GPIO{pin} -> Stopped (0 RPM)")
+          messages.ConsoleMessage.append(f"[sensor{sensor['id']}], GPIO{pin} -> Stopped (0 RPM)")
       self.showSensorControlButtons()
     else:
-      self.consoleMessage("Cannot start simulation: Invalid settings")
+      messages.ConsoleMessage.append("Cannot start simulation: Invalid settings")
 
   def simulationStop(self) -> None:
     self.elapsed_timer.stop()
@@ -123,22 +125,3 @@ class App(QMainWindow, Ui_MainWindow):
   def showSettingsDialog(self) -> None:
     dialog = SettingsDialog(self.settings_obj)
 
-  # MESSAGES
-
-  def consoleMessage(self, message: str) -> None:
-    self.consoleText.appendPlainText(message)
-  
-  def showAlert(self, title: str, text: str, alert_type: str) -> None:
-    alert = QMessageBox(self)
-    alert.setWindowTitle(title)
-    alert.setText(text)
-    if alert_type == "info":
-      alert.setIcon(QMessageBox.Icon.Information)
-    elif alert_type == "warning":
-      alert.setIcon(QMessageBox.Icon.Warning)
-    elif alert_type == "critical":
-      alert.setIcon(QMessageBox.Icon.Critical)
-    else:
-      alert.setIcon(QMessageBox.Icon.Information)
-    alert.setStandardButtons(QMessageBox.StandardButton.Ok)
-    alert.exec()

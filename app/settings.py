@@ -1,4 +1,5 @@
 import os
+import messages
 
 class Settings:
   def __init__(self):
@@ -10,19 +11,19 @@ class Settings:
     if not os.path.exists(self.settings_file):
       with open(self.settings_file, "w", encoding="utf-8") as f:
         json.dump(self.createConfigExample(), f, indent=2)
-        # TODO add entry to console "Settings file created: settings.json"
+        messages.ConsoleMessage.append(f"Settings file created: {self.settings_file}")
     try:
       settings = {}
       with open(self.settings_file, "r", encoding="utf-8") as f:
         settings = json.load(f)
-        self.consoleMessage(f"Settings loaded from file {self.settings_file}")
+        messages.ConsoleMessage.append(f"Settings loaded from file {self.settings_file}")
         return settings
     except FileNotFoundError:
-      self.consoleMessage(f"Settings file not found: {self.settings_file}")
+      messages.ConsoleMessage.append(f"Settings file not found: {self.settings_file}")
     except json.JSONDecodeError:
-      self.consoleMessage(f"Settings file {self.settings_file} corrupted")
+      messages.ConsoleMessage.append(f"Settings file {self.settings_file} corrupted")
     except Exception as e:
-      self.consoleMessage(f"Error loading settings: {e}")
+      messages.ConsoleMessage.append(f"Error loading settings: {e}")
     finally:
       return settings
   
@@ -86,8 +87,8 @@ class Settings:
       # TODO pass new saved settings to Main Window
       self.accept()
     else:
-      # TODO show error message and prevent dialog closing
-      pass
+      messages.showAlert(self, "Error", "Invalid settings", "critical")
+      # TODO prevent dialog closing
 
   def getCurrentConfigId(self, settings: dict) -> str:
     for key, value in settings.items():
