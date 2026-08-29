@@ -3,6 +3,7 @@ from PySide6.QtWidgets import QMainWindow, QMessageBox, QApplication
 from PySide6.QtCore import Qt, QElapsedTimer, QDateTime
 from ui import Ui_MainWindow
 from settings_dialog import SettingsDialog
+from settings import Settings
 
 import json
 from gpiozero import DigitalOutputDevice
@@ -22,16 +23,13 @@ class App(QMainWindow, Ui_MainWindow):
     self.setCursor(Qt.CursorShape.BlankCursor)
     # set first stackedWidget page
     self.stackedWidget.setCurrentIndex(0)
+    
+    # init settings object
+    self.settings_obj = Settings()
 
-    # settings file
-    self.settings_file = "settings.json"
-    # load settings from file
-    self.saved_settings, self.current_settings = self.loadSettings()
-    # set values from settings
-    self.setPageItems(self.saved_settings)
-
-    # show or hide items
+    # show, hide or set items
     self.hideSensorControlButtons()
+    self.setPageItems(self.settings_obj.saved_settings)
 
     # connect slots (methods) to buttons on signals (events)
     self.simulationBtn.clicked.connect(self.simulation)
@@ -57,9 +55,8 @@ class App(QMainWindow, Ui_MainWindow):
     self.elapsed_timer.start()
     self.channels = {}
     # sensors as dict
-    current_values = self.getCurrentValues()
-    if self.validateValues(values):
-      sensors = current_values["sensors"]
+    if self.settings_obj.validateSettings(self.settings_obj.current_settings):
+      sensors = self.settings_obj.current_settings[self.settings_obj.current_config_id]["sensors"]
       for sensor in sensors:
         rpm = sensor["rpm"]
         channel = DigitalOutputDevice(sensor["gpio"], active_high=True, initial_value=True)
@@ -79,7 +76,7 @@ class App(QMainWindow, Ui_MainWindow):
           self.consoleMessage(f"[sensor{sensor['id']}], GPIO{pin} -> Stopped (0 RPM)")
       self.showSensorControlButtons()
     else:
-      self.consoleMessage("Cannot start simulation: Invalid values")
+      self.consoleMessage("Cannot start simulation: Invalid settings")
 
   def simulationStop(self) -> None:
     self.elapsed_timer.stop()
@@ -95,15 +92,13 @@ class App(QMainWindow, Ui_MainWindow):
 
   # PAGE ITEMS
 
-  def setPageItems(self, values: dict) -> None:
+  def setPageItems(self, settings: dict) -> None:
     # TODO set values from dict into page items (config "current" key in dict is true)
     pass
+    # self.current_config_id = 1
 
   def countRevolutions(self) -> None:
     pass
-
-  def validateValues(self, values: dict) -> bool:
-    return True 
   
   def manualRpmCheckBoxChanged(self, state) -> None:
     if state == Qt.CheckState.Checked:
@@ -123,44 +118,10 @@ class App(QMainWindow, Ui_MainWindow):
     self.controlS3Btn.setVisible(True)
     self.controlS4Btn.setVisible(True)
 
-  # SETTINGS
-
-  def updateCurrentSettings(self) -> None:
-    # TODO dict must be with the same structure as settings
-    self.current_settings = {
-      "mainBlockRpm": self.mainBlockRpm.value(),
-      "sensor1_gpio": self.sensor1Gpio.value(),
-      "sensor1_rpm": self.sensor1Rpm.value(),
-      "sensor1_coefficient": self.sensor1Coefficient.value(),
-      "sensor2_gpio": self.sensor2Gpio.value(),
-      "sensor2_rpm": self.sensor2Rpm.value(),
-      "sensor2_coefficient": self.sensor2Coefficient.value(),
-      "sensor3_gpio": self.sensor3Gpio.value(),
-      "sensor3_rpm": self.sensor3Rpm.value(),
-      "sensor3_coefficient": self.sensor3Coefficient.value(),
-      "sensor4_gpio": self.sensor4Gpio.value(),
-      "sensor4_rpm": self.sensor4Rpm.value(),
-      "sensor4_coefficient": self.sensor4Coefficient.value(),
-    }
+  # DIALOG
 
   def showSettingsDialog(self) -> None:
-    dialog = SettingsDialog(self.saved_settings)
-    
-  def loadSettings(self) -> dict:
-    try:
-      settings = {}
-      with open(self.settins_file, "r", encoding="utf-8") as f:
-        settings = json.load(f)
-        self.consoleMessage(f"Settings loaded from file {self.settings_file}")
-        return settings
-    except FileNotFoundError:
-      self.consoleMessage(f"Settings file not found: {self.settings_file}")
-    except json.JSONDecodeError:
-      self.consoleMessage(f"Settings file {self.settings_file} corrupted")
-    except Exception as e:
-      self.consoleMessage(f"Error loading settings: {e}")
-    finally:
-      return settings
+    dialog = SettingsDialog(self.settings_obj)
 
   # MESSAGES
 
