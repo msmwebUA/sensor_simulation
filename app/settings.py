@@ -95,8 +95,9 @@ class Settings:
       if value["current"]:
         return key
   
-  def setCurrentConfigId(self, settings: dict, config_id: str) -> None:
-    settings[config_id]["current"] = True
+  def setCurrentConfigId(self, config_id: str) -> None:
+    self.current_settings[config_id]["current"] = True
+    self.current_config_id = config_id
 
   def createConfigExample(self) -> dict:
     return {
