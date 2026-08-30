@@ -11,7 +11,9 @@
 
 ### Old machine and new machine select list and own settings
 
-### Suggest to save current settings to file on program exit
+### Suggest to save current settings to file on program exit (if current_settings != saved_settings)
+
+### Settings saved in dialog successfully -> replace saved_settings with modified_settings, update changed configs in current_settings
 
 ### Settings (dialog window):
 
