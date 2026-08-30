@@ -30,13 +30,17 @@ class App(QMainWindow, Ui_MainWindow):
     messages.ConsoleLogger.setWidget(self.consoleText)
 
     # show, hide or set items
+    self.sensorControlButtons = [self.controlS1Btn, self.controlS2Btn, self.controlS3Btn, self.controlS4Btn]
+    self.coefficientItems = [[self.sensor1Coefficient, 1], [self.sensor2Coefficient, 2], [self.sensor3Coefficient, 3], [self.sensor4Coefficient, 4]]
+    self.sensorRpmItems = [[self.sensor1Rpm, 1], [self.sensor2Rpm, 2], [self.sensor3Rpm, 3], [self.sensor4Rpm, 4]]
     self.hideSensorControlButtons()
     self.setPageItems(self.settings_obj.saved_settings)
 
     # connect slots (methods) to buttons on signals (events)
-    self.simulationBtn.clicked.connect(self.simulation)
     self.settingsBtn.clicked.connect(self.showSettingsDialog)
+    self.configComboBox.currentIndexChanged.connect(self.configComboBoxChanged)
     self.manualRpmCheckBox.clicked.connect(self.manualRpmCheckBoxChanged)
+    self.simulationBtn.clicked.connect(self.simulation)
     self.controlS1Btn.clicked.connect(lambda _, arg="1": self.controlSensor(arg))
     self.controlS2Btn.clicked.connect(lambda _, arg="2": self.controlSensor(arg))
     self.controlS3Btn.clicked.connect(lambda _, arg="3": self.controlSensor(arg))
@@ -58,6 +62,7 @@ class App(QMainWindow, Ui_MainWindow):
     self.channels = {}
     # sensors as dict
     if self.settings_obj.validateSettings(self.settings_obj.current_settings):
+      self.disablePageItems()
       sensors = self.settings_obj.current_settings[self.settings_obj.current_config_id]["sensors"]
       for sensor in sensors:
         rpm = sensor["rpm"]
@@ -83,6 +88,8 @@ class App(QMainWindow, Ui_MainWindow):
   def simulationStop(self) -> None:
     self.elapsed_timer.stop()
     self.purgeChannels()
+    self.hideSensorControlButtons()
+    self.unablePageItems()
   
   def purgeChannels(self) -> None:
     for channel in self.channels.values():
@@ -94,34 +101,86 @@ class App(QMainWindow, Ui_MainWindow):
 
   # PAGE ITEMS
 
+  def getPageItems(self) -> dict:
+    values = {
+      "mainBlockRpm": self.mainBlockRpm.value(),
+    }
+    for coefficient in self.coefficientItems:
+      values[f"sensor{coefficient[1]}Coefficient"] = coefficient[0].text()
+    for rpm in self.sensorRpmItems:
+      values[f"sensor{rpm[1]}Rpm"] = rpm[0].value()
+    return values
+
   def setPageItems(self, settings: dict) -> None:
-    # TODO set values from dict into page items (config "current" key in dict is true)
-    pass
-    # self.current_config_id = 1
+    current_config_id = self.settings_obj.current_config_id
+    # config combobox
+    self.configComboBox.clear()
+    for key, value in settings.items():
+      self.configComboBox.addItem(value["name"], key)
+    self.configComboBox.setCurrentIndex(current_config_id)
+    # main block
+    self.mainBlockRpm.setValue(settings[current_config_id]["main_block"]["rpm"])
+    # sensors
+    sensors = settings[current_config_id]["sensors"]
+    for sensor in sensors:
+      # coefficients
+      for item in self.coefficientItems:
+        if item[1] == sensor["id"]:
+          item[0].setText(sensor["coefficient"])
+      # rpm
+      for item in self.sensorRpmItems:
+        if item[1] == sensor["id"]:
+          item[0].setValue(sensor["rpm"])
+    # uncheck manual rpm checkbox
+    self.manualRpmCheckBox.setChecked(False)
 
   def countRevolutions(self) -> None:
     pass
   
   def manualRpmCheckBoxChanged(self, state) -> None:
     if state == Qt.CheckState.Checked:
-      pass
+      for item in self.coefficientItems:
+        item[0].setEnabled(False)
+      for item in self.sensorRpmItems:
+        item[0].setEnabled(True)
     elif state == Qt.CheckState.Unchecked:
-      pass
+      for item in self.coefficientItems:
+        item[0].setEnabled(True)
+      for item in self.sensorRpmItems:
+        item[0].setEnabled(False)
   
+  def disablePageItems(self) -> None:
+    self.configComboBox.setEnabled(False)
+    self.mainBlockRpm.setEnabled(False)
+    for item in self.coefficientItems:
+      item[0].setEnabled(False)
+    for item in self.sensorRpmItems:
+      item[0].setEnabled(False)
+    self.manualRpmCheckBox.setEnabled(False)
+
+  def unablePageItems(self) -> None:
+    self.configComboBox.setEnabled(True)
+    self.mainBlockRpm.setEnabled(True)
+    for item in self.coefficientItems:
+      item[0].setEnabled(True)
+    for item in self.sensorRpmItems:
+      item[0].setEnabled(True)
+    self.manualRpmCheckBox.setEnabled(True)
+
   def hideSensorControlButtons(self) -> None:
-    self.controlS1Btn.setVisible(False)
-    self.controlS2Btn.setVisible(False)
-    self.controlS3Btn.setVisible(False)
-    self.controlS4Btn.setVisible(False)
+    for btn in self.sensorControlButtons:
+      btn.setVisible(False)
   
   def showSensorControlButtons(self) -> None:
-    self.controlS1Btn.setVisible(True)
-    self.controlS2Btn.setVisible(True)
-    self.controlS3Btn.setVisible(True)
-    self.controlS4Btn.setVisible(True)
+    for btn in self.sensorControlButtons:
+      btn.setVisible(True)
+
+  def configComboBoxChanged(self) -> None:
+    combobox_config_id = self.configComboBox.currentIndex()
+    self.settings_obj.setCurrentConfigId(combobox_config_id)
+    self.setPageItems(self.settings_obj.current_settings)
 
   # DIALOG
 
   def showSettingsDialog(self) -> None:
     dialog = SettingsDialog(self.settings_obj)
-
