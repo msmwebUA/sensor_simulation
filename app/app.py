@@ -31,6 +31,7 @@ class App(QMainWindow, Ui_MainWindow):
 
     # show, hide or set items
     self.sensorControlButtons = [self.controlS1Btn, self.controlS2Btn, self.controlS3Btn, self.controlS4Btn]
+    self.mainBlockItems = [[self.mainBlockRpm, "mainBlockRpm"]]
     self.coefficientItems = [[self.sensor1Coefficient, 1], [self.sensor2Coefficient, 2], [self.sensor3Coefficient, 3], [self.sensor4Coefficient, 4]]
     self.sensorRpmItems = [[self.sensor1Rpm, 1], [self.sensor2Rpm, 2], [self.sensor3Rpm, 3], [self.sensor4Rpm, 4]]
     self.hideSensorControlButtons()
@@ -45,6 +46,7 @@ class App(QMainWindow, Ui_MainWindow):
     self.controlS2Btn.clicked.connect(lambda _, arg="2": self.controlSensor(arg))
     self.controlS3Btn.clicked.connect(lambda _, arg="3": self.controlSensor(arg))
     self.controlS4Btn.clicked.connect(lambda _, arg="4": self.controlSensor(arg))
+
 
     # init elapsed timer
     self.elapsed_timer = QElapsedTimer()
@@ -102,9 +104,9 @@ class App(QMainWindow, Ui_MainWindow):
   # PAGE ITEMS
 
   def getPageItems(self) -> dict:
-    values = {
-      "mainBlockRpm": self.mainBlockRpm.value(),
-    }
+    values = {}
+    for main_block in self.mainBlockItems:
+      values[main_block[1]] = main_block[0].value()
     for coefficient in self.coefficientItems:
       values[f"sensor{coefficient[1]}Coefficient"] = coefficient[0].text()
     for rpm in self.sensorRpmItems:
@@ -119,7 +121,8 @@ class App(QMainWindow, Ui_MainWindow):
       self.configComboBox.addItem(value["name"], key)
     self.configComboBox.setCurrentIndex(current_config_id)
     # main block
-    self.mainBlockRpm.setValue(settings[current_config_id]["main_block"]["rpm"])
+    for item in self.mainBlockItems:
+      item[0].setValue(settings[current_config_id]["main_block"]["rpm"])
     # sensors
     sensors = settings[current_config_id]["sensors"]
     for sensor in sensors:
@@ -151,7 +154,8 @@ class App(QMainWindow, Ui_MainWindow):
   
   def disablePageItems(self) -> None:
     self.configComboBox.setEnabled(False)
-    self.mainBlockRpm.setEnabled(False)
+    for item in self.mainBlockItems:
+      item[0].setEnabled(False)
     for item in self.coefficientItems:
       item[0].setEnabled(False)
     for item in self.sensorRpmItems:
@@ -160,7 +164,8 @@ class App(QMainWindow, Ui_MainWindow):
 
   def unablePageItems(self) -> None:
     self.configComboBox.setEnabled(True)
-    self.mainBlockRpm.setEnabled(True)
+    for item in self.mainBlockItems:
+      item[0].setEnabled(True)
     for item in self.coefficientItems:
       item[0].setEnabled(True)
     for item in self.sensorRpmItems:
