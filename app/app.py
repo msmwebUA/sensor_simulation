@@ -35,7 +35,7 @@ class App(QMainWindow, Ui_MainWindow):
     self.coefficientItems = [[self.sensor1Coefficient, 1], [self.sensor2Coefficient, 2], [self.sensor3Coefficient, 3], [self.sensor4Coefficient, 4]]
     self.sensorRpmItems = [[self.sensor1Rpm, 1], [self.sensor2Rpm, 2], [self.sensor3Rpm, 3], [self.sensor4Rpm, 4]]
     self.hideSensorControlButtons()
-    self.setPageItems(self.settings_obj.saved_settings)
+    self.setPageItemsValues(self.settings_obj.saved_settings)
 
     # connect slots (methods) to buttons on signals (events)
     self.settingsBtn.clicked.connect(self.showSettingsDialog)
@@ -46,7 +46,9 @@ class App(QMainWindow, Ui_MainWindow):
     self.controlS2Btn.clicked.connect(lambda _, arg="2": self.controlSensor(arg))
     self.controlS3Btn.clicked.connect(lambda _, arg="3": self.controlSensor(arg))
     self.controlS4Btn.clicked.connect(lambda _, arg="4": self.controlSensor(arg))
-
+    for item in [self.mainBlockItems, self.coefficientItems, self.sensorRpmItems]:
+      for subitem in item:
+        subitem[0].valueChanged.connect(self.pageItemsChanged)
 
     # init elapsed timer
     self.elapsed_timer = QElapsedTimer()
@@ -103,8 +105,27 @@ class App(QMainWindow, Ui_MainWindow):
 
   # PAGE ITEMS
 
-  def getPageItems(self) -> dict:
-    values = {}
+  def getPageItemsValues(self) -> dict:
+    return {
+      self.configComboBox.currentIndex(): {
+        "name": self.configComboBox.currentText(),
+        "current": True,
+        "main_block": {
+          "rpm": self.mainBlockRpm.value()
+        },
+        "sensors": [
+          {
+            "id": sensor["id"],
+            "gpio": sensor["gpio"],
+            "rpm": rpm.value(),
+            "coefficient": coefficient.text()
+          } for sensor, rpm, coefficient in zip(self.settings_obj.current_settings[self.settings_obj.current_config_id]["sensors"], self.sensorRpmItems, self.coefficientItems)
+        ]
+      }
+    }
+
+
+    values["cofigId"] = self.configComboBox.currentIndex()
     for main_block in self.mainBlockItems:
       values[main_block[1]] = main_block[0].value()
     for coefficient in self.coefficientItems:
@@ -113,7 +134,7 @@ class App(QMainWindow, Ui_MainWindow):
       values[f"sensor{rpm[1]}Rpm"] = rpm[0].value()
     return values
 
-  def setPageItems(self, settings: dict) -> None:
+  def setPageItemsValues(self, settings: dict) -> None:
     current_config_id = self.settings_obj.current_config_id
     # config combobox
     self.configComboBox.clear()
@@ -136,6 +157,14 @@ class App(QMainWindow, Ui_MainWindow):
           item[0].setValue(sensor["rpm"])
     # uncheck manual rpm checkbox
     self.manualRpmCheckBox.setChecked(False)
+
+  def pageItemsChanged(self) -> None:
+    values = self.getPageItemsValues()
+    if self.settings_obj.validateSettings(values):
+      self.countRevolutions()
+      self.simulationBtn.setEnabled(True)
+    else:
+      self.simulationBtn.setEnabled(False)
 
   def countRevolutions(self) -> None:
     pass
@@ -183,7 +212,7 @@ class App(QMainWindow, Ui_MainWindow):
   def configComboBoxChanged(self) -> None:
     combobox_config_id = self.configComboBox.currentIndex()
     self.settings_obj.setCurrentConfigId(combobox_config_id)
-    self.setPageItems(self.settings_obj.current_settings)
+    self.setPageItemsValues(self.settings_obj.current_settings)
 
   # DIALOG
 
