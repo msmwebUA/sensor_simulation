@@ -16,6 +16,20 @@ def showAlert(parent: QWidget, title: str, text: str, alert_type: str) -> None:
   alert.setStandardButtons(QMessageBox.StandardButton.Ok)
   alert.exec()
 
+def showConfirmation(parent: QWidget, title: str, text: str) -> bool:
+  # param parent: window or widget where alert will be shown
+  answer = QMessageBox.question(
+    parent,
+    title,
+    text,
+    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No, # btns
+    QMessageBox.StandardButton.No # focus
+  )
+  if answer == QMessageBox.StandardButton.Yes:
+    return True
+  else:
+    return False
+
 class ConsoleMessage:
   _widget = None
 
