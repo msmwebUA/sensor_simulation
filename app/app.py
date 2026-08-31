@@ -123,7 +123,7 @@ class App(QMainWindow, Ui_MainWindow):
 
   def getPageItemsValues(self) -> dict:
     return {
-      self.configComboBox.currentIndex(): {
+      self.configComboBox.currentData(): {
         "name": self.configComboBox.currentText(),
         "current": True,
         "main_block": {
@@ -140,13 +140,20 @@ class App(QMainWindow, Ui_MainWindow):
       }
     }
 
-  def setPageItemsValues(self, settings: dict) -> None:
+  def setPageItemsValues(self, settings: dict, update_combobox: bool = True) -> None:
     current_config_id = self.settings_obj.current_config_id
-    # config combobox
-    self.configComboBox.clear()
-    for key, value in settings.items():
-      self.configComboBox.addItem(value["name"], key)
-    self.configComboBox.setCurrentIndex(current_config_id)
+    # update config combobox
+    if update_combobox:
+      self.configComboBox.clear()
+      for key, value in settings.items():
+        self.configComboBox.addItem(value["name"], key)
+      index = self.configComboBox.findData(current_config_id)
+      if index != -1:
+        self.configComboBox.setCurrentIndex(index)
+      else:
+        self.configComboBox.setCurrentIndex(0)
+        messages.ConsoleMessage.append(f"Current config {current_config_id} not found on the page, using first config")
+        messages.showAlert(self, "Error", f"Current config {current_config_id} not found on the page, using first config", "critical")
     # main block
     for item in self.mainBlockItems:
       item[0].setValue(settings[current_config_id]["main_block"]["rpm"])
@@ -264,9 +271,9 @@ class App(QMainWindow, Ui_MainWindow):
       btn.setVisible(True)
 
   def configComboBoxChanged(self) -> None:
-    combobox_config_id = self.configComboBox.currentIndex()
-    self.settings_obj.setCurrentConfigId(combobox_config_id)
-    self.setPageItemsValues(self.settings_obj.current_settings)
+    config_id = self.configComboBox.currentData()
+    self.settings_obj.setCurrentConfigId(config_id)
+    self.setPageItemsValues(self.settings_obj.current_settings, False)
 
   # DIALOG
 
