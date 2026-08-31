@@ -62,6 +62,12 @@ class App(QMainWindow, Ui_MainWindow):
     # flag
     self.manual_mode = False
     self.simulationStarted = False
+    self.channels_active = {
+      1: [True, self.controlS1Btn],
+      2: [True, self.controlS2Btn],
+      3: [True, self.controlS3Btn],
+      4: [True, self.controlS4Btn]
+    }
 
     # add listener to program exit and purge channels
       # self.purgeChannels()
@@ -114,10 +120,15 @@ class App(QMainWindow, Ui_MainWindow):
       channel.close()
 
   def controlSensor(self, sensor: int) -> None:
-    # channel.off()
-    # messages.ConsoleMessage.append(f"[sensor{sensor['id']}], GPIO{sensor['gpio']} -> Stopped (0 RPM)")
-    pass
-    pass
+    self.channels_active[sensor][0] = not self.channels_active[sensor][0]
+    if self.channels_active[sensor][0]:
+      self.channels[sensor].on()
+      messages.ConsoleMessage.append(f"Sensor{sensor} -> Active")
+      self.channels_active[sensor][1].setText(f"⏹️ Stop S{sensor}")
+    else:
+      self.channels[sensor].off()
+      messages.ConsoleMessage.append(f"Sensor{sensor} -> Paused")
+      self.channels_active[sensor][1].setText(f"▶️ Start S{sensor}")
 
   # PAGE ITEMS
 
