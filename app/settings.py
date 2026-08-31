@@ -25,7 +25,7 @@ class Settings:
         else:
           messages.ConsoleMessage.append(f"Settings file {self.settings_file} corrupted")
           messages.showAlert(self, "Error", "Settings file corrupted", "critical")
-          return {}
+          return None
     except FileNotFoundError:
       messages.ConsoleMessage.append(f"Settings file not found: {self.settings_file}")
     except json.JSONDecodeError:
@@ -33,11 +33,17 @@ class Settings:
     except Exception as e:
       messages.ConsoleMessage.append(f"Error loading settings: {e}")
     finally:
-      return {}
+      return None
   
-  def updateCurrentSettings(self) -> None:
-    # TODO update current settings with values changed by user (in main window)
-    pass
+  def updateCurrentSettings(self, config: dict) -> bool:
+    # update current settings with values changed by user (in main window)
+    try:
+      self.current_settings[self.current_config_id] = config[self.current_config_id]
+      return True
+    except Exception as e:
+      messages.ConsoleMessage.append(f"Error updating current settings: {e}")
+      messages.showAlert(self, "Error", f"{e}", "critical")
+      return False
 
   def validateSettings(self, settings: dict) -> bool:
     errors = []
@@ -49,16 +55,16 @@ class Settings:
       errors.append("Settings dictionary is empty")
 
     # validate root keys
-    # root_keys = list(data.keys())
-    # if any(not isinstance(key, str) or not key.isdigit() for key in root_keys):
-    #   errors.append('Root keys in settings must be positive integers represented as strings ("1", "2", "3", etc)')
-    ## else:
-    ##   key_numbers = [int(key) for key in root_keys]
-    ##   if any(number <= 0 for number in key_numbers):
-    ##     errors.append('Root keys must start from "1"')
-    ##   expected_keys = set(range(1, len(root_keys) + 1))
-    ##   if set(key_numbers) != expected_keys:
-    ##     errors.append('Root keys in settings must be consecutive and start from "1"')
+    root_keys = list(data.keys())
+    if any(not isinstance(key, str) or not key.isdigit() for key in root_keys):
+      errors.append('Root keys in settings must be positive integers represented as strings ("1", "2", "3", etc)')
+    # else:
+    #   key_numbers = [int(key) for key in root_keys]
+    #   if any(number <= 0 for number in key_numbers):
+    #     errors.append('Root keys must start from "1"')
+    #   expected_keys = set(range(1, len(root_keys) + 1))
+    #   if set(key_numbers) != expected_keys:
+    #     errors.append('Root keys in settings must be consecutive and start from "1"')
 
     # validate configs
     for config_key, config in settings.items():
