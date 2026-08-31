@@ -130,16 +130,6 @@ class App(QMainWindow, Ui_MainWindow):
       }
     }
 
-
-    values["cofigId"] = self.configComboBox.currentIndex()
-    for main_block in self.mainBlockItems:
-      values[main_block[1]] = main_block[0].value()
-    for coefficient in self.coefficientItems:
-      values[f"sensor{coefficient[1]}Coefficient"] = coefficient[0].text()
-    for rpm in self.sensorRpmItems:
-      values[f"sensor{rpm[1]}Rpm"] = rpm[0].value()
-    return values
-
   def setPageItemsValues(self, settings: dict) -> None:
     current_config_id = self.settings_obj.current_config_id
     # config combobox
