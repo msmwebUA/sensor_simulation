@@ -2,11 +2,13 @@ import os
 import json
 import re
 import messages
+import copy
 
 class Settings:
   def __init__(self):
     self.settings_file = "settings.json"
-    self.saved_settings, self.current_settings = self.loadSettings()
+    self.saved_settings = self.loadSettings()
+    self.current_settings = copy.deepcopy(self.saved_settings)
     self.current_config_id = self.getCurrentConfigId(self.saved_settings)
     self.available_gpio_pins = {4, 5, 6, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27}
     self.rpm_limit = 10001
@@ -14,7 +16,7 @@ class Settings:
   def loadSettings(self) -> dict:
     if not os.path.exists(self.settings_file):
       with open(self.settings_file, "w", encoding="utf-8") as f:
-        json.dump(self.createConfigExample(), f, indent=2)
+        json.dump(self.createConfigExample("1","DefaultConfig1"), f, indent=2)
         messages.ConsoleMessage.append(f"Settings file created: {self.settings_file}")
     try:
       with open(self.settings_file, "r", encoding="utf-8") as f:
@@ -141,14 +143,15 @@ class Settings:
     # validation passed
     return True
 
-  def saveSettings(self) -> bool:
-    if self.validateSettings(self.modified_settings):
+  def saveSettings(self, modified_settings: dict) -> bool:
+    if self.validateSettings(modified_settings):
       try:
         # write to json
         with open(self.settings_file, "w", encoding="utf-8") as f:
           json.dump(settings_data, f, indent=2)
         # replace current and saved settings
-        self.saved_settings, self.current_settings = self.modified_settings
+        self.saved_settings = copy.deepcopy(modified_settings)
+        self.current_settings = copy.deepcopy(modified_settings)
         messages.ConsoleMessage.append(f"Settings saved to file {self.settings_file}")
         return True
       except Exception as e:
@@ -164,10 +167,10 @@ class Settings:
     self.current_settings[config_id]["current"] = True
     self.current_config_id = config_id
 
-  def createConfigExample(self) -> dict:
+  def createConfigExample(self, config_id: str, config_name: str) -> dict:
     return {
-      "1": {
-        "name": "Config 1",
+      config_id: {
+        "name": config_name,
         "current": true,
         "main_block": {
           "rpm": 20
