@@ -167,10 +167,12 @@ class App(QMainWindow, Ui_MainWindow):
   def pageItemsChanged(self) -> None:
     values = self.getPageItemsValues()
     if self.settings_obj.validateSettings(values):
-      # TODO update current settings updateCurrentSettings(self.countRevolutions(values)) ??
-      self.simulationBtn.setEnabled(True)
+      if self.settings_obj.updateCurrentSettings(self.countRevolutions(values)):
+        self.simulationBtn.setEnabled(True)
+      else:
+        self.simulationBtn.setEnabled(False)
     else:
-      # validation failed (messages already shown by validateSettings())
+      # validation failed, messages already shown during validation
       self.simulationBtn.setEnabled(False)
 
   def countRevolutions(self, values: dict) -> dict:
