@@ -5,8 +5,8 @@ from ui import Ui_MainWindow
 from settings_dialog import SettingsDialog
 from settings import Settings
 import messages
+from math import gcd
 
-import json
 from gpiozero import DigitalOutputDevice
 
 VERSION = "1.0"
@@ -27,7 +27,10 @@ class App(QMainWindow, Ui_MainWindow):
     
     # init objects
     self.settings_obj = Settings()
-    messages.ConsoleLogger.setWidget(self.consoleText)
+    if not self.settings_obj.saved_settings:
+      messages.showAlert(self, "Error", f"Cannot run program. Settings file '{self.settings_obj.settings_file}' corrupted. Fix invalid values.", "critical")
+      # close app
+      return
 
     # show, hide or set items
     self.sensorControlButtons = [self.controlS1Btn, self.controlS2Btn, self.controlS3Btn, self.controlS4Btn]
@@ -56,6 +59,9 @@ class App(QMainWindow, Ui_MainWindow):
     # print version to console
     messages.ConsoleMessage.append(f"3K Sensor simulation: version {VERSION}")
 
+    # flag
+    self.manual_mode = False
+
     # add listener to program exit and purge channels
       # self.purgeChannels()
 
@@ -81,10 +87,10 @@ class App(QMainWindow, Ui_MainWindow):
           # RPI LOW -> pin closed to GND
           # RPI HIGH -> pin switched to 
           channel.blink(on_time=half_period, off_time=half_period, background=True)
-          messages.ConsoleMessage.append(f"[sensor{sensor['id']}], GPIO{pin} -> {rpm} RPM (half period: {half_period:.4f} s)")
+          messages.ConsoleMessage.append(f"[sensor{sensor['id']}], GPIO{sensor['gpio']} -> {rpm} RPM (half period: {half_period:.4f} s)")
         else:
           channel.off()
-          messages.ConsoleMessage.append(f"[sensor{sensor['id']}], GPIO{pin} -> Stopped (0 RPM)")
+          messages.ConsoleMessage.append(f"[sensor{sensor['id']}], GPIO{sensor['gpio']} -> Stopped (0 RPM)")
       self.showSensorControlButtons()
     else:
       messages.ConsoleMessage.append("Cannot start simulation: Invalid settings")
@@ -161,21 +167,67 @@ class App(QMainWindow, Ui_MainWindow):
   def pageItemsChanged(self) -> None:
     values = self.getPageItemsValues()
     if self.settings_obj.validateSettings(values):
-      self.countRevolutions()
+      # TODO update current settings updateCurrentSettings(self.countRevolutions(values)) ??
       self.simulationBtn.setEnabled(True)
     else:
+      # validation failed (messages already shown by validateSettings())
       self.simulationBtn.setEnabled(False)
 
-  def countRevolutions(self) -> None:
-    pass
+  def countRevolutions(self, values: dict) -> dict:
+    edited_values = values.copy()
+    errors = []
+    for config in edited_values.values():
+      main_block = config.get("main_block", {})
+      main_block_rpm = main_block.get("rpm", 0)
+      for sensor in config.get("sensors", []):
+        # calculate sensor rpm from main block rpm and coefficient
+        if self.manual_mode:
+          coefficient = sensor.get("coefficient", "0/1")
+          try:
+            numerator, denominator = map(int, coefficient.split("/"))
+          except (ValueError, AttributeError):
+            errors.append(f"Invalid coefficient format: {coefficient}. Expected format: x/y")
+          if denominator == 0:
+            errors.append("Coefficient denominator cannot be zero")
+          # calculate result
+          result = main_block_rpm * numerator
+          # check result
+          if result % denominator != 0:
+            errors.append(f"Sensor RPM must be an integer. {main_block_rpm} * {coefficient} does not produce an integer RPM")
+          # write result
+          sensor["rpm"] = result // denominator
+        # calculate coefficient from sensor rpm and main block rpm
+        else:
+          sensor_rpm = sensor.get("rpm", 0)
+          if main_block_rpm == 0:
+            errors.append("Cannot calculate coefficient when main block RPM is zero")
+          # simplify fraction using gsd
+          divisor = gcd(abs(sensor_rpm), abs(main_block_rpm))
+          numerator = sensor_rpm // divisor
+          denominator = main_block_rpm // divisor
+          # keep denominator positive
+          if denominator < 0:
+            numerator *= -1
+            denominator *= -1
+          # write result
+          sensor["coefficient"] = f"{numerator}/{denominator}"
+    if errors:
+      for error in errors:
+        messages.ConsoleMessage.append(error)
+        messages.showAlert(self, "Error", error, "critical")
+      return None
+    else:
+      return edited_values
   
   def manualRpmCheckBoxChanged(self, state) -> None:
     if state == Qt.CheckState.Checked:
+      self.manual_mode = True
       for item in self.coefficientItems:
         item[0].setEnabled(False)
       for item in self.sensorRpmItems:
         item[0].setEnabled(True)
     elif state == Qt.CheckState.Unchecked:
+      self.manual_mode = False
       for item in self.coefficientItems:
         item[0].setEnabled(True)
       for item in self.sensorRpmItems:
