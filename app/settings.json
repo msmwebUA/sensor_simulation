@@ -1,6 +1,6 @@
 {
   "1": {
-    "name": "Config 1",
+    "name": "Config1",
     "current": true,
     "main_block": {
       "rpm": 20
@@ -33,7 +33,7 @@
     ]
   },
   "2": {
-    "name": "Config 2",
+    "name": "Config2",
     "current": false,
     "main_block": {
       "rpm": 20
