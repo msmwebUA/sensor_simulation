@@ -141,47 +141,19 @@ class Settings:
     # validation passed
     return True
 
-  def saveSettings(self) -> None:
+  def saveSettings(self) -> bool:
     if self.validateSettings(self.modified_settings):
-      # TODO fix structure of JSON
-      settings_data = {
-        "main_block": {"rpm": values["mainBlockRpm"]},
-        "sensors": [
-          {
-            "id": 1,
-            "gpio": values["sensor1_gpio"],
-            "rpm": values["sensor1_rpm"],
-            "coefficient": values["sensor1_coefficient"],
-          },
-          {
-            "id": 2,
-            "gpio": values["sensor2_gpio"],
-            "rpm": values["sensor2_rpm"],
-            "coefficient": values["sensor2_coefficient"],
-          },
-          {
-            "id": 3,
-            "gpio": values["sensor3_gpio"],
-            "rpm": values["sensor3_rpm"],
-            "coefficient": values["sensor3_coefficient"],
-          },
-          {
-            "id": 4,
-            "gpio": values["sensor4_gpio"],
-            "rpm": values["sensor4_rpm"],
-            "coefficient": values["sensor4_coefficient"],
-          },
-        ],
-      }
-      # write to json
-      with open(self.settings_file, "w", encoding="utf-8") as f:
-        json.dump(settings_data, f, indent=2)
-      # close dialog as success
-      # TODO pass new saved settings to Main Window
-      self.accept()
-    else:
-      messages.showAlert(self, "Error", "Invalid settings", "critical")
-      # TODO prevent dialog closing
+      try:
+        # write to json
+        with open(self.settings_file, "w", encoding="utf-8") as f:
+          json.dump(settings_data, f, indent=2)
+        # replace current and saved settings
+        self.saved_settings, self.current_settings = self.modified_settings
+        messages.ConsoleMessage.append(f"Settings saved to file {self.settings_file}")
+        return True
+      except Exception as e:
+        messages.showAlert(self, "Error", f"Error saving settings: {e}", "critical")
+    return False
 
   def getCurrentConfigId(self, settings: dict) -> str:
     for key, value in settings.items():
