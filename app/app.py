@@ -61,51 +61,61 @@ class App(QMainWindow, Ui_MainWindow):
 
     # flag
     self.manual_mode = False
+    self.simulationStarted = False
 
     # add listener to program exit and purge channels
       # self.purgeChannels()
 
   # SIMULATION
+  def simulation(self) -> None:
+    # start or stop simulation
+    self.simulationStarted = not self.simulationStarted
+    if self.simulationStarted:
+      self.simulationStart()
+    else:
+      self.simulationStop()
 
   def simulationStart(self) -> None:
-    self.elapsed_timer.start()
-    self.channels = {}
-    # sensors as dict
-    if self.settings_obj.validateSettings(self.settings_obj.current_settings):
+    # start if current config valid
+    if self.settings_obj.validateSettings(self.settings_obj.current_settings[self.settings_obj.current_config_id]):
       self.disablePageItems()
+      self.simulationBtn.setText("⏹️ Stop simulation")
+      self.channels = {}
+      self.elapsed_timer.start()
       sensors = self.settings_obj.current_settings[self.settings_obj.current_config_id]["sensors"]
       for sensor in sensors:
         rpm = sensor["rpm"]
         channel = DigitalOutputDevice(sensor["gpio"], active_high=True, initial_value=True)
         # keep gpio pin's mode as object otherwise it will be collected to garbage in next iteration
         self.channels[sensor["id"]] = channel
-        if rpm > 0:
-          frequency = rpm / 60.0
-          # time for active low and high
-          half_period = (1.0 / frequency) / 2.0
-          # run built-in blink method, infinite
-          # RPI LOW -> pin closed to GND
-          # RPI HIGH -> pin switched to 
-          channel.blink(on_time=half_period, off_time=half_period, background=True)
-          messages.ConsoleMessage.append(f"[sensor{sensor['id']}], GPIO{sensor['gpio']} -> {rpm} RPM (half period: {half_period:.4f} s)")
-        else:
-          channel.off()
-          messages.ConsoleMessage.append(f"[sensor{sensor['id']}], GPIO{sensor['gpio']} -> Stopped (0 RPM)")
+        # frequency
+        frequency = rpm / 60.0
+        # time for active low and high
+        half_period = (1.0 / frequency) / 2.0
+        # run built-in blink method, infinite
+        # RPI LOW -> pin closed to GND
+        # RPI HIGH -> pin switched to 
+        channel.blink(on_time=half_period, off_time=half_period, background=True)
+        messages.ConsoleMessage.append(f"[sensor{sensor['id']}], GPIO{sensor['gpio']} -> {rpm} RPM (half period: {half_period:.4f} s)") 
       self.showSensorControlButtons()
     else:
       messages.ConsoleMessage.append("Cannot start simulation: Invalid settings")
+      messages.showAlert(self, "Error", "Cannot start simulation: Invalid settings", "critical")
 
   def simulationStop(self) -> None:
     self.elapsed_timer.stop()
     self.purgeChannels()
     self.hideSensorControlButtons()
     self.unablePageItems()
+    self.simulationBtn.setText("▶️ Start simulation")
   
   def purgeChannels(self) -> None:
     for channel in self.channels.values():
       channel.close()
 
   def controlSensor(self, sensor: int) -> None:
+    # channel.off()
+    # messages.ConsoleMessage.append(f"[sensor{sensor['id']}], GPIO{sensor['gpio']} -> Stopped (0 RPM)")
     pass
     pass
 
@@ -262,3 +272,5 @@ class App(QMainWindow, Ui_MainWindow):
 
   def showSettingsDialog(self) -> None:
     dialog = SettingsDialog(self.settings_obj)
+    if dialog.exec() == QDialog.Accepted:
+      self.setPageItemsValues(self.settings_obj.current_settings)
