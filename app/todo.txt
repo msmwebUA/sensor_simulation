@@ -15,6 +15,8 @@
 
 ### Settings saved in dialog successfully -> replace saved_settings with modified_settings, update changed configs in current_settings
 
+### Save rpm for sensor that corresponding to coefficient. Do not save manual rpm values
+
 ### Settings (dialog window):
 
 - GPIO pins (4 numfields)
