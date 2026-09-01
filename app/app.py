@@ -39,6 +39,7 @@ class App(QMainWindow, Ui_MainWindow):
 
     self.channels = {}
     self.channels_active = {}
+    self.channels_half_period = {}
 
     # show, hide or set items
     self.sensorControlButtons = [self.controlS1Btn, self.controlS2Btn, self.controlS3Btn, self.controlS4Btn]
@@ -107,6 +108,7 @@ class App(QMainWindow, Ui_MainWindow):
         frequency = rpm / 60.0
         # time for active low and high
         half_period = (1.0 / frequency) / 2.0
+        self.channels_half_period[sensor["id"]] = half_period
         # run built-in blink method, infinite
         # RPI LOW -> pin closed to GND
         # RPI HIGH -> pin switched to 
@@ -118,11 +120,14 @@ class App(QMainWindow, Ui_MainWindow):
       messages.showAlert(self, "Error", "Cannot start simulation: Invalid settings", "critical")
 
   def simulationStop(self) -> None:
-    self.elapsed_timer.stop()
+    elapsed_ms = self.elapsed_timer.elapsed()
+    self.elapsed_timer.invalidate()
     self.purgeChannels()
+    self.channels_half_period = {}
     self.hideSensorControlButtons()
     self.unablePageItems()
     self.simulationBtn.setText("▶️ Start simulation")
+    messages.ConsoleMessage.append(f"Simulation stopped. Elapsed time: {self.formatElapsedTime(elapsed_ms)}")
   
   def purgeChannels(self) -> None:
     for channel in self.channels.values():
@@ -131,13 +136,26 @@ class App(QMainWindow, Ui_MainWindow):
   def controlSensor(self, sensor: int) -> None:
     self.channels_active[sensor][0] = not self.channels_active[sensor][0]
     if self.channels_active[sensor][0]:
-      self.channels[sensor].on()
+      half_period = self.channels_half_period[sensor]
+      self.channels[sensor].blink(on_time=half_period, off_time=half_period, background=True)
       messages.ConsoleMessage.append(f"Sensor{sensor} -> Active")
       self.channels_active[sensor][1].setText(f"⏹️ Stop S{sensor}")
     else:
       self.channels[sensor].off()
       messages.ConsoleMessage.append(f"Sensor{sensor} -> Paused")
       self.channels_active[sensor][1].setText(f"▶️ Start S{sensor}")
+
+  def formatElapsedTime(self, elapsed_ms: int) -> str:
+    total_seconds = elapsed_ms // 1000
+    hours, remainder = divmod(total_seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    millis = elapsed_ms % 1000
+    if hours:
+      return f"{hours}h {minutes}m {seconds}s"
+    elif minutes:
+      return f"{minutes}m {seconds}s"
+    else:
+      return f"{seconds}.{millis:03d}s"
 
   # PAGE ITEMS
 
