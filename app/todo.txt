@@ -1,37 +1,4 @@
-### Main window:
-
-- 3K logo
-- Main block rpm (numfield)
-- Coefficients (% or common fraction: 1/2 etc) (4 numfields, for each axis). Parse and validate in code
-- Rpm per sensor (4 numfields, auto count / refresh when coefficients changed)
-- Stop channel btns for each sensor (visible during simulation)
-- Settings btn
-- Start/Stop simulation btn
-- Info region (disabled text area) (console for messages (rpm per sensor etc) as QPlainTextEdit) 
-
-### Old machine and new machine select list and own settings
-
 ### Suggest to save current settings to file on program exit (if current_settings != saved_settings)
-
-### Settings saved in dialog successfully -> replace saved_settings with modified_settings, update changed configs in current_settings
-
-### Save rpm for sensor that corresponding to coefficient. Do not save manual rpm values
-
-### Settings (dialog window):
-
-- GPIO pins (4 numfields)
-- Main block rpm
-- Default rpm per sensor (4 numfields)
-- Default coefficient per sensor (4 numfields)
-- Save btn (read/write to txt file)
-
-### Validate values (only integers > -1), validate coefficients and rpms
-
-### Errors to alert window
-
-
-
-### Update system date and time before install python requirements
 
 ### Install emojis pkg:
   sudo apt update
