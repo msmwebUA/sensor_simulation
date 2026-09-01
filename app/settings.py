@@ -7,11 +7,11 @@ import copy
 class Settings:
   def __init__(self):
     self.settings_file = "settings.json"
+    self.available_gpio_pins = {4, 5, 6, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27}
+    self.rpm_limit = 10001
     self.saved_settings = self.loadSettings()
     self.current_settings = copy.deepcopy(self.saved_settings)
     self.current_config_id = self.getCurrentConfigId(self.saved_settings)
-    self.available_gpio_pins = {4, 5, 6, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27}
-    self.rpm_limit = 10001
   
   def loadSettings(self) -> dict:
     if not os.path.exists(self.settings_file):
@@ -57,7 +57,7 @@ class Settings:
       errors.append("Settings dictionary is empty")
 
     # validate root keys
-    root_keys = list(data.keys())
+    root_keys = list(settings.keys())
     if any(not isinstance(key, str) or not key.isdigit() for key in root_keys):
       errors.append('Root keys in settings must be positive integers represented as strings ("1", "2", "3", etc)')
     # else:
@@ -110,7 +110,7 @@ class Settings:
           sensor_ids.append(sensor_id)
         # gpio
         gpio = sensor.get("gpio")
-        if (not isinstance(gpio, int) or isinstance(gpio, bool) or gpio not in seft.available_gpio_pins):
+        if (not isinstance(gpio, int) or isinstance(gpio, bool) or gpio not in self.available_gpio_pins):
           errors.append(f'{sensor_location}: "gpio" must be one of the freely available GPIO pins: {str(seft.available_gpio_pins)}')
         # sensor rpm
         sensor_rpm = sensor.get("rpm")
@@ -148,7 +148,7 @@ class Settings:
       try:
         # write to json
         with open(self.settings_file, "w", encoding="utf-8") as f:
-          json.dump(settings_data, f, indent=2)
+          json.dump(modified_settings, f, indent=2)
         # replace current and saved settings
         self.saved_settings = copy.deepcopy(modified_settings)
         self.current_settings = copy.deepcopy(modified_settings)
@@ -171,7 +171,7 @@ class Settings:
     return {
       config_id: {
         "name": config_name,
-        "current": true,
+        "current": True,
         "main_block": {
           "rpm": 20
         },

@@ -1,5 +1,5 @@
 # import UI
-from PySide6.QtWidgets import QMainWindow, QApplication
+from PySide6.QtWidgets import QMainWindow, QApplication, QDialog
 from PySide6.QtCore import Qt, QElapsedTimer, QDateTime
 from ui import Ui_MainWindow
 from settings_dialog import SettingsDialog

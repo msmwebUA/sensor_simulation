@@ -24,7 +24,7 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
       self.configComboBox.setCurrentIndex(index)
     else:
       self.configComboBox.setCurrentIndex(0)
-      messages.showAlert(self, "Warning", f"Current config {current_config_id} not found in the saved settings, using first config", "warning")
+      messages.showAlert(self, "Warning", f"Current config {self.settings_obj.current_config_id} not found in the saved settings, using first config", "warning")
 
     # show or hide items
     self.showConfigItems()
@@ -87,7 +87,7 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
     name = self.configName.text()
     if (not name or not name.isalnum() or len(name) > 20):
       messages.showAlert(self, "Error", f"Config name must: 1. Not be empty; 2. Contain letters and digits only 3. Be max 20 chars)", "critical")
-    elif (any(config["name"].strip().lower() == new_name.strip().lower() for config in self.modified_settings.values())):
+    elif (any(config["name"].strip().lower() == name.strip().lower() for config in self.modified_settings.values())):
       messages.showAlert(self, "Error", f"Config name must be unique", "critical")
     else:
       # create or update config
@@ -111,7 +111,7 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
     if confirm:
       self.modified_settings.pop(self.configComboBox.currentData())
       self.configComboBox.removeItem(self.configComboBox.currentIndex())
-      if self.comboBox.currentIndex != -1:
+      if self.configComboBox.currentIndex != -1:
         self.modified_settings[self.configComboBox.currentData()]["current"] = True
       else:
         # create new config with default values
