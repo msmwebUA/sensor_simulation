@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import QDialog
+from PySide6.QtGui import QCloseEvent
 from ui_settings_dialog import Ui_settingsDialog
 import messages
 import copy
@@ -36,9 +37,13 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
     self.deleteConfigBtn.clicked.connect(self.deleteConfig)
     self.saveConfigNameBtn.clicked.connect(self.manageConfig)
     self.replaceWithCurrentValuesBtn.clicked.connect(self.replaceValues)
+    self.sensor1Gpio.valueChanged.connect(lambda new_value: self.gpioChanged(1, new_value))
+    self.sensor2Gpio.valueChanged.connect(lambda new_value: self.gpioChanged(2, new_value))
+    self.sensor3Gpio.valueChanged.connect(lambda new_value: self.gpioChanged(3, new_value))
+    self.sensor4Gpio.valueChanged.connect(lambda new_value: self.gpioChanged(4, new_value))
     self.cancelBtn.clicked.connect(self.closeDialog)
     self.saveBtn.clicked.connect(self.save)
-
+    
     # flags
     self.new_config_flag = False
     self.rename_config_flag = False
@@ -111,11 +116,15 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
     if confirm:
       self.modified_settings.pop(self.configComboBox.currentData())
       self.configComboBox.removeItem(self.configComboBox.currentIndex())
-      if self.configComboBox.currentIndex != -1:
+      if self.configComboBox.currentIndex() != -1:
+        # unset current from other configs
+        for config in self.modified_settings.values():
+          config["current"] = False 
         self.modified_settings[self.configComboBox.currentData()]["current"] = True
       else:
         # create new config with default values
         self.modified_settings.update(self.settings_obj.createConfigExample("1", "DefaultConfig1"))
+        self.configComboBox.addItem("DefaultConfig1", "1")
       self.configComboBox.setCurrentIndex(0)
       self.showConfigItems()
 
@@ -146,6 +155,11 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
       for item in self.gpio_pins_items:
         if item[1] == sensor["id"]:
           item[0].setValue(sensor["gpio"])
+
+  def gpioChanged(self, sensor_id, new_value) -> None:
+    for sensor in self.modified_settings[self.configComboBox.currentData()]["sensors"]:
+      if sensor["id"] == sensor_id:
+        sensor["gpio"] = new_value
 
   # DIALOG EVENTS
 

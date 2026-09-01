@@ -25,12 +25,16 @@ class App(QMainWindow, Ui_MainWindow):
     self.setCursor(Qt.CursorShape.BlankCursor)
     # set first stackedWidget page
     self.stackedWidget.setCurrentIndex(0)
+
+    # set widget for console messages
+    messages.ConsoleMessage.setWidget(self.consoleText)
     
     # init objects and vars
     self.settings_obj = Settings()
     if not self.settings_obj.saved_settings:
       messages.showAlert(self, "Error", f"Cannot run program. Settings file '{self.settings_obj.settings_file}' corrupted. Fix invalid values.", "critical")
       # close app
+      QApplication.instance().quit()
       return
 
     self.channels = {}
@@ -47,15 +51,17 @@ class App(QMainWindow, Ui_MainWindow):
     # connect slots (methods) to buttons on signals (events)
     self.settingsBtn.clicked.connect(self.showSettingsDialog)
     self.configComboBox.currentIndexChanged.connect(self.configComboBoxChanged)
-    self.manualRpmCheckBox.clicked.connect(self.manualRpmCheckBoxChanged)
+    self.manualRpmCheckBox.stateChanged.connect(self.manualRpmCheckBoxChanged)
     self.simulationBtn.clicked.connect(self.simulation)
-    self.controlS1Btn.clicked.connect(lambda _, arg=1: self.controlSensor(arg))
-    self.controlS2Btn.clicked.connect(lambda _, arg=2: self.controlSensor(arg))
-    self.controlS3Btn.clicked.connect(lambda _, arg=3: self.controlSensor(arg))
-    self.controlS4Btn.clicked.connect(lambda _, arg=4: self.controlSensor(arg))
-    for item in [self.mainBlockItems, self.coefficientItems, self.sensorRpmItems]:
+    self.controlS1Btn.clicked.connect(lambda _: self.controlSensor(1))
+    self.controlS2Btn.clicked.connect(lambda _: self.controlSensor(2))
+    self.controlS3Btn.clicked.connect(lambda _: self.controlSensor(3))
+    self.controlS4Btn.clicked.connect(lambda _: self.controlSensor(4))
+    for item in [self.mainBlockItems, self.sensorRpmItems]:
       for subitem in item:
         subitem[0].valueChanged.connect(self.pageItemsChanged)
+    for item in self.coefficientItems:
+      item[0].editingFinished.connect(self.pageItemsChanged)
 
     # init elapsed timer
     self.elapsed_timer = QElapsedTimer()
@@ -136,6 +142,8 @@ class App(QMainWindow, Ui_MainWindow):
   # PAGE ITEMS
 
   def getPageItemsValues(self) -> dict:
+    coefficient_by_id = {sid: widget for widget, sid in self.coefficientItems}
+    rpm_by_id = {sid: widget for widget, sid in self.sensorRpmItems}
     return {
       self.configComboBox.currentData(): {
         "name": self.configComboBox.currentText(),
@@ -147,9 +155,10 @@ class App(QMainWindow, Ui_MainWindow):
           {
             "id": sensor["id"],
             "gpio": sensor["gpio"],
-            "rpm": rpm.value(),
-            "coefficient": coefficient.text()
-          } for sensor, rpm, coefficient in zip(self.settings_obj.current_settings[self.settings_obj.current_config_id]["sensors"], self.sensorRpmItems, self.coefficientItems)
+            "rpm": rpm_by_id[sensor["id"]].value(),
+            "coefficient": coefficient_by_id[sensor["id"]].text()
+          }
+          for sensor in self.settings_obj.current_settings[self.settings_obj.current_config_id]["sensors"]
         ]
       }
     }
@@ -246,13 +255,13 @@ class App(QMainWindow, Ui_MainWindow):
       return edited_values
   
   def manualRpmCheckBoxChanged(self, state) -> None:
-    if state == Qt.CheckState.Checked:
+    if state == Qt.CheckState.Checked.value:
       self.manual_mode = True
       for item in self.coefficientItems:
         item[0].setEnabled(False)
       for item in self.sensorRpmItems:
         item[0].setEnabled(True)
-    elif state == Qt.CheckState.Unchecked:
+    else:
       self.manual_mode = False
       for item in self.coefficientItems:
         item[0].setEnabled(True)

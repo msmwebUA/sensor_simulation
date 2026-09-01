@@ -11,12 +11,15 @@ class Settings:
     self.rpm_limit = 10001
     self.saved_settings = self.loadSettings()
     self.current_settings = copy.deepcopy(self.saved_settings)
-    self.current_config_id = self.getCurrentConfigId(self.saved_settings)
+    if self.saved_settings:
+        self.current_config_id = self.getCurrentConfigId(self.saved_settings)
+    else:
+        self.current_config_id = None
   
   def loadSettings(self) -> dict:
     if not os.path.exists(self.settings_file):
       with open(self.settings_file, "w", encoding="utf-8") as f:
-        json.dump(self.createConfigExample("1","DefaultConfig1"), f, indent=2)
+        json.dump(self.createConfigExample("1", "DefaultConfig1"), f, indent=2)
         messages.ConsoleMessage.append(f"Settings file created: {self.settings_file}")
     try:
       with open(self.settings_file, "r", encoding="utf-8") as f:
@@ -26,7 +29,7 @@ class Settings:
           return settings
         else:
           messages.ConsoleMessage.append(f"Settings file {self.settings_file} corrupted")
-          messages.showAlert(self, "Error", "Settings file corrupted", "critical")
+          messages.showAlert(None, "Error", "Settings file corrupted", "critical")
           return None
     except FileNotFoundError:
       messages.ConsoleMessage.append(f"Settings file not found: {self.settings_file}")
@@ -34,8 +37,7 @@ class Settings:
       messages.ConsoleMessage.append(f"Settings file {self.settings_file} corrupted")
     except Exception as e:
       messages.ConsoleMessage.append(f"Error loading settings: {e}")
-    finally:
-      return None
+    return None
   
   def updateCurrentSettings(self, config: dict) -> bool:
     # update current settings with values changed by user (in main window)
@@ -44,7 +46,7 @@ class Settings:
       return True
     except Exception as e:
       messages.ConsoleMessage.append(f"Error updating current settings: {e}")
-      messages.showAlert(self, "Error", f"{e}", "critical")
+      messages.showAlert(None, "Error", f"{e}", "critical")
       return False
 
   def validateSettings(self, settings: dict) -> bool:
@@ -97,6 +99,7 @@ class Settings:
       if len(sensors) != 4:
         errors.append(f"{location}: exactly four sensors are required")
       sensor_ids = []
+      gpio_pins = []
       for index, sensor in enumerate(sensors, start=1):
         sensor_location = (f'{location}, sensor #{index}')
         if not isinstance(sensor, dict):
@@ -108,10 +111,11 @@ class Settings:
           errors.append(f'{sensor_location}: "id" must be an integer from 1 to 4')
         else:
           sensor_ids.append(sensor_id)
+          gpio_pins.append(sensor.get("gpio"))
         # gpio
         gpio = sensor.get("gpio")
         if (not isinstance(gpio, int) or isinstance(gpio, bool) or gpio not in self.available_gpio_pins):
-          errors.append(f'{sensor_location}: "gpio" must be one of the freely available GPIO pins: {str(seft.available_gpio_pins)}')
+          errors.append(f'{sensor_location}: "gpio" must be one of the available GPIO pins: {str(self.available_gpio_pins)}')
         # sensor rpm
         sensor_rpm = sensor.get("rpm")
         if (not isinstance(sensor_rpm, int) or isinstance(sensor_rpm, bool) or not 0 < sensor_rpm < self.rpm_limit):
@@ -128,6 +132,10 @@ class Settings:
       sensor_ids_set = set(sensor_ids)
       if (len(sensor_ids_set) != 4 or sensor_ids_set != {1, 2, 3, 4}):
         errors.append(f"{location}: sensor IDs must be exactly 1, 2, 3 and 4")
+      # check gpio pins are unique
+      gpio_pins_set = set(gpio_pins)
+      if len(gpio_pins_set) != len(gpio_pins):
+        errors.append(f"{location}: GPIO pins set must contain 4 unique pins")
     # validate json
     try:
       json.dumps(settings)
@@ -137,7 +145,7 @@ class Settings:
     if errors:
       for error in errors:
         messages.ConsoleMessage.append(error)
-        messages.showAlert(self, "Error", error, "critical")
+        messages.showAlert(None, "Error", error, "critical")
       errors.clear()
       return False
     # validation passed
@@ -155,7 +163,7 @@ class Settings:
         messages.ConsoleMessage.append(f"Settings saved to file {self.settings_file}")
         return True
       except Exception as e:
-        messages.showAlert(self, "Error", f"Error saving settings: {e}", "critical")
+        messages.showAlert(None, "Error", f"Error saving settings: {e}", "critical")
     return False
 
   def getCurrentConfigId(self, settings: dict) -> str:
