@@ -72,12 +72,12 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
   def showConfigNameForm(self, flag: str) -> None:
     self.hideConfigItems()
     if flag == "add":
-      self.configNameLabel.setValue("New config")
+      self.configNameLabel.setText("New config")
       self.configName.setText("")
       self.new_config_flag = True
       self.rename_config_flag = False
     elif flag == "rename":
-      self.configNameLabel.setValue("Rename to")
+      self.configNameLabel.setText("Rename to")
       self.configName.setText(self.configComboBox.currentText())
       self.rename_config_flag = True
       self.new_config_flag = False
@@ -123,7 +123,7 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
 
   def replaceValues(self) -> None:
     config_id = self.configComboBox.currentData()
-    self.modified_settings[config_id] = copy.deepcopy(self.settings_obj.current_settings[config_id])
+    self.modified_settings[config_id] = copy.deepcopy(self.settings_obj.current_settings[self.settings_obj.current_config_id])
     self.setPageItems()
   
   def setPageItems(self) -> None:

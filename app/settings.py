@@ -162,8 +162,13 @@ class Settings:
     for key, value in settings.items():
       if value["current"]:
         return key
+    # no current config found, set and return first config
+    first_key = next(iter(settings))
+    settings[first_key]["current"] = True
+    return first_key
   
   def setCurrentConfigId(self, config_id: str) -> None:
+    self.current_settings[self.current_config_id]["current"] = False
     self.current_settings[config_id]["current"] = True
     self.current_config_id = config_id
 

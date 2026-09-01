@@ -5,6 +5,7 @@ from ui import Ui_MainWindow
 from settings_dialog import SettingsDialog
 from settings import Settings
 import messages
+import copy
 from math import gcd
 
 from gpiozero import DigitalOutputDevice
@@ -25,12 +26,15 @@ class App(QMainWindow, Ui_MainWindow):
     # set first stackedWidget page
     self.stackedWidget.setCurrentIndex(0)
     
-    # init objects
+    # init objects and vars
     self.settings_obj = Settings()
     if not self.settings_obj.saved_settings:
       messages.showAlert(self, "Error", f"Cannot run program. Settings file '{self.settings_obj.settings_file}' corrupted. Fix invalid values.", "critical")
       # close app
       return
+
+    self.channels = {}
+    self.channels_active = {}
 
     # show, hide or set items
     self.sensorControlButtons = [self.controlS1Btn, self.controlS2Btn, self.controlS3Btn, self.controlS4Btn]
@@ -45,10 +49,10 @@ class App(QMainWindow, Ui_MainWindow):
     self.configComboBox.currentIndexChanged.connect(self.configComboBoxChanged)
     self.manualRpmCheckBox.clicked.connect(self.manualRpmCheckBoxChanged)
     self.simulationBtn.clicked.connect(self.simulation)
-    self.controlS1Btn.clicked.connect(lambda _, arg="1": self.controlSensor(arg))
-    self.controlS2Btn.clicked.connect(lambda _, arg="2": self.controlSensor(arg))
-    self.controlS3Btn.clicked.connect(lambda _, arg="3": self.controlSensor(arg))
-    self.controlS4Btn.clicked.connect(lambda _, arg="4": self.controlSensor(arg))
+    self.controlS1Btn.clicked.connect(lambda _, arg=1: self.controlSensor(arg))
+    self.controlS2Btn.clicked.connect(lambda _, arg=2: self.controlSensor(arg))
+    self.controlS3Btn.clicked.connect(lambda _, arg=3: self.controlSensor(arg))
+    self.controlS4Btn.clicked.connect(lambda _, arg=4: self.controlSensor(arg))
     for item in [self.mainBlockItems, self.coefficientItems, self.sensorRpmItems]:
       for subitem in item:
         subitem[0].valueChanged.connect(self.pageItemsChanged)
@@ -62,12 +66,6 @@ class App(QMainWindow, Ui_MainWindow):
     # flag
     self.manual_mode = False
     self.simulationStarted = False
-    self.channels_active = {
-      1: [True, self.controlS1Btn],
-      2: [True, self.controlS2Btn],
-      3: [True, self.controlS3Btn],
-      4: [True, self.controlS4Btn]
-    }
 
     # add listener to program exit and purge channels
       # self.purgeChannels()
@@ -86,7 +84,12 @@ class App(QMainWindow, Ui_MainWindow):
     if self.settings_obj.validateSettings(self.settings_obj.current_settings[self.settings_obj.current_config_id]):
       self.disablePageItems()
       self.simulationBtn.setText("⏹️ Stop simulation")
-      self.channels = {}
+      self.channels_active = {
+        1: [True, self.controlS1Btn],
+        2: [True, self.controlS2Btn],
+        3: [True, self.controlS3Btn],
+        4: [True, self.controlS4Btn]
+      }
       self.elapsed_timer.start()
       sensors = self.settings_obj.current_settings[self.settings_obj.current_config_id]["sensors"]
       for sensor in sensors:
@@ -194,7 +197,7 @@ class App(QMainWindow, Ui_MainWindow):
       self.simulationBtn.setEnabled(False)
 
   def countRevolutions(self, values: dict) -> dict:
-    edited_values = values.copy()
+    edited_values = copy.deepcopy(values)
     errors = []
     for config in edited_values.values():
       main_block = config.get("main_block", {})
@@ -205,32 +208,35 @@ class App(QMainWindow, Ui_MainWindow):
           coefficient = sensor.get("coefficient", "0/1")
           try:
             numerator, denominator = map(int, coefficient.split("/"))
+            if denominator == 0:
+              errors.append("Coefficient denominator cannot be zero")
+              raise ValueError
+            # calculate result
+            result = main_block_rpm * numerator
+            # check result
+            if result % denominator != 0:
+              errors.append(f"Sensor RPM must be an integer. {main_block_rpm} * {coefficient} does not produce an integer RPM")
+              raise ValueError
+            # write result
+            sensor["rpm"] = result // denominator
           except (ValueError, AttributeError):
-            errors.append(f"Invalid coefficient format: {coefficient}. Expected format: x/y")
-          if denominator == 0:
-            errors.append("Coefficient denominator cannot be zero")
-          # calculate result
-          result = main_block_rpm * numerator
-          # check result
-          if result % denominator != 0:
-            errors.append(f"Sensor RPM must be an integer. {main_block_rpm} * {coefficient} does not produce an integer RPM")
-          # write result
-          sensor["rpm"] = result // denominator
+            errors.append(f"Invalid coefficient format: {coefficient}. Expected format: x/y. Division by zero not allowed.")
         # calculate coefficient from sensor rpm and main block rpm
         else:
           sensor_rpm = sensor.get("rpm", 0)
           if main_block_rpm == 0:
             errors.append("Cannot calculate coefficient when main block RPM is zero")
-          # simplify fraction using gsd
-          divisor = gcd(abs(sensor_rpm), abs(main_block_rpm))
-          numerator = sensor_rpm // divisor
-          denominator = main_block_rpm // divisor
-          # keep denominator positive
-          if denominator < 0:
-            numerator *= -1
-            denominator *= -1
-          # write result
-          sensor["coefficient"] = f"{numerator}/{denominator}"
+          else:
+            # simplify fraction using gsd
+            divisor = gcd(abs(sensor_rpm), abs(main_block_rpm))
+            numerator = sensor_rpm // divisor
+            denominator = main_block_rpm // divisor
+            # keep denominator positive
+            if denominator < 0:
+              numerator *= -1
+              denominator *= -1
+            # write result
+            sensor["coefficient"] = f"{numerator}/{denominator}"
     if errors:
       for error in errors:
         messages.ConsoleMessage.append(error)
@@ -267,11 +273,17 @@ class App(QMainWindow, Ui_MainWindow):
     self.configComboBox.setEnabled(True)
     for item in self.mainBlockItems:
       item[0].setEnabled(True)
-    for item in self.coefficientItems:
-      item[0].setEnabled(True)
-    for item in self.sensorRpmItems:
-      item[0].setEnabled(True)
     self.manualRpmCheckBox.setEnabled(True)
+    if self.manual_mode:
+      for item in self.coefficientItems:
+        item[0].setEnabled(False)
+      for item in self.sensorRpmItems:
+        item[0].setEnabled(True)
+    else:
+      for item in self.coefficientItems:
+        item[0].setEnabled(True)
+      for item in self.sensorRpmItems:
+        item[0].setEnabled(False)
 
   def hideSensorControlButtons(self) -> None:
     for btn in self.sensorControlButtons:
