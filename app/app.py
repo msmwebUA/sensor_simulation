@@ -22,12 +22,14 @@ class App(QMainWindow, Ui_MainWindow):
     # maximized window
     self.showMaximized()
     # hide cursor
-    self.setCursor(Qt.CursorShape.BlankCursor)
+    # self.setCursor(Qt.CursorShape.BlankCursor)
     # set first stackedWidget page
     self.stackedWidget.setCurrentIndex(0)
 
     # set widget for console messages
     messages.ConsoleMessage.setWidget(self.consoleText)
+    # print version to console
+    messages.ConsoleMessage.append(f"3K Sensor simulation: version {VERSION}")
     
     # init objects and vars
     self.settings_obj = Settings()
@@ -36,6 +38,7 @@ class App(QMainWindow, Ui_MainWindow):
       # close app
       QApplication.instance().quit()
       return
+    self.elapsed_timer = QElapsedTimer()
 
     self.channels = {}
     self.channels_active = {}
@@ -64,12 +67,6 @@ class App(QMainWindow, Ui_MainWindow):
     for item in self.coefficientItems:
       item[0].editingFinished.connect(self.pageItemsChanged)
 
-    # init elapsed timer
-    self.elapsed_timer = QElapsedTimer()
-
-    # print version to console
-    messages.ConsoleMessage.append(f"3K Sensor simulation: version {VERSION}")
-
     # flag
     self.manual_mode = False
     self.simulationStarted = False
@@ -88,7 +85,7 @@ class App(QMainWindow, Ui_MainWindow):
 
   def simulationStart(self) -> None:
     # start if current config valid
-    if self.settings_obj.validateSettings(self.settings_obj.current_settings[self.settings_obj.current_config_id]):
+    if self.settings_obj.validateSettings(self.settings_obj.current_settings):
       self.disablePageItems()
       self.simulationBtn.setText("⏹️ Stop simulation")
       self.channels_active = {
