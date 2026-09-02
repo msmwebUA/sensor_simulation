@@ -51,6 +51,7 @@ class App(QMainWindow, Ui_MainWindow):
     self.sensorRpmItems = [[self.sensor1Rpm, 1], [self.sensor2Rpm, 2], [self.sensor3Rpm, 3], [self.sensor4Rpm, 4]]
     self.hideSensorControlButtons()
     self.setPageItemsValues(self.settings_obj.saved_settings)
+    self.manualRpmCheckBoxChanged(self.manualRpmCheckBox.checkState())
 
     # connect slots (methods) to buttons on signals (events)
     self.settingsBtn.clicked.connect(self.showSettingsDialog)
