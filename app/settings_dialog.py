@@ -100,9 +100,9 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
       if self.new_config_flag:
         new_key = str(int(max(self.modified_settings.keys(), key=int)) + 1)
         self.modified_settings.update(self.settings_obj.createConfigExample(new_key, name))
+        self.settings_obj.setCurrentConfigId(new_key, self.modified_settings)
         self.configComboBox.addItem(name, new_key)
         self.configComboBox.setCurrentIndex(self.configComboBox.count() - 1)
-        self.setPageItems()
         messages.showAlert(self, "Info", f"New config contains default example values. Consider changing them", "info")
       elif self.rename_config_flag:
         self.modified_settings[self.configComboBox.currentData()]["name"] = name
