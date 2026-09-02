@@ -172,12 +172,12 @@ class Settings:
     settings[first_key]["current"] = True
     return first_key
   
-  def setCurrentConfigId(self, config_id: str) -> None:
+  def setCurrentConfigId(self, config_id: str, settings: dict) -> None:
     # unset current from other configs
-    for config in self.current_settings.values():
+    for config in settings.values():
       config["current"] = False 
     # set current
-    self.current_settings[config_id]["current"] = True
+    settings[config_id]["current"] = True
 
   def createConfigExample(self, config_id: str, config_name: str) -> dict:
     return {

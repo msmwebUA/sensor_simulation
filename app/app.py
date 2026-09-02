@@ -320,7 +320,7 @@ class App(QMainWindow, Ui_MainWindow):
 
   def configComboBoxChanged(self) -> None:
     config_id = self.configComboBox.currentData()
-    self.settings_obj.setCurrentConfigId(config_id)
+    self.settings_obj.setCurrentConfigId(config_id, self.settings_obj.current_settings)
     self.setPageItemsValues(self.settings_obj.current_settings, False)
 
   # DIALOG

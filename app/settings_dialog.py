@@ -115,18 +115,16 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
   def deleteConfig(self) -> None:
     confirm = messages.showConfirmation(self, "Delete config", "Are you sure you want to delete this config?")
     if confirm:
+      # delete config
       self.modified_settings.pop(self.configComboBox.currentData())
       self.configComboBox.removeItem(self.configComboBox.currentIndex())
-      if self.configComboBox.currentIndex() != -1:
-        # unset current from other configs
-        for config in self.modified_settings.values():
-          config["current"] = False 
-        self.modified_settings[self.configComboBox.currentData()]["current"] = True
-      else:
+      # check combobox has no items
+      if self.configComboBox.currentIndex() == -1:
         # create new config with default values
         self.modified_settings.update(self.settings_obj.createConfigExample("1", "DefaultConfig1"))
         self.configComboBox.addItem("DefaultConfig1", "1")
-      self.configComboBox.setCurrentIndex(0)
+        self.configComboBox.setCurrentIndex(0)
+      self.settings_obj.setCurrentConfigId(self.configComboBox.currentData(), self.modified_settings)
       self.showConfigItems()
 
   # VALUES AND PAGE ITEMS
@@ -138,7 +136,7 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
   
   def setPageItems(self) -> None:
     config_id = self.configComboBox.currentData()
-    self.modified_settings[config_id]["current"] = True
+    self.settings_obj.setCurrentConfigId(config_id, self.modified_settings)
     config = self.modified_settings[config_id]
     sensor_data = [
       f"S{sensor['id']}: coeff. {sensor['coefficient']}, RPM: {sensor['rpm']}"
