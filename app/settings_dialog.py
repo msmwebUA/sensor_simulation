@@ -27,8 +27,9 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
     else:
       self.configComboBox.setCurrentIndex(0)
       messages.showAlert(self, "Warning", f"Current config {self.settings_obj[current_config_id]['name']} not found in the saved settings, using first config", "warning")
-
+    
     # show or hide items
+    self.setPageItems()
     self.showConfigItems()
 
     # Connect methods to events
@@ -92,7 +93,7 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
     # validate config name
     name = self.configName.text()
     if (not name or not name.isalnum() or len(name) > 20):
-      messages.showAlert(self, "Error", f"Config name must: 1. Not be empty; 2. Contain letters and digits only 3. Be max 20 chars)", "critical")
+      messages.showAlert(self, "Error", f"Config name must: 1. Not be empty; 2. Contain letters and digits only 3. Be max 20 chars", "critical")
     elif (any(config["name"].strip().lower() == name.strip().lower() for config in self.modified_settings.values())):
       messages.showAlert(self, "Error", f"Config name must be unique", "critical")
     else:
@@ -125,7 +126,6 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
         self.configComboBox.addItem("DefaultConfig1", "1")
         self.configComboBox.setCurrentIndex(0)
       self.settings_obj.setCurrentConfigId(self.configComboBox.currentData(), self.modified_settings)
-      self.showConfigItems()
 
   # VALUES AND PAGE ITEMS
 
@@ -136,24 +136,25 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
   
   def setPageItems(self) -> None:
     config_id = self.configComboBox.currentData()
-    self.settings_obj.setCurrentConfigId(config_id, self.modified_settings)
-    config = self.modified_settings[config_id]
-    sensor_data = [
-      f"S{sensor['id']}: coeff. {sensor['coefficient']}, RPM: {sensor['rpm']}"
-      for sensor in config["sensors"]
-    ]
-    text = (
-      f"Config name: {config['name']};  Main block RPM: {config['main_block']['rpm']}\n"
-      f"Sensors:\n"
-      f"\n".join(sensor_data)
-    )
-    # show list of config values as label
-    self.defaultValuesLabel.setText(text)
-    # gpio pins
-    for sensor in config["sensors"]:
-      for item in self.gpio_pins_items:
-        if item[1] == sensor["id"]:
-          item[0].setValue(sensor["gpio"])
+    if config_id:
+      # self.settings_obj.setCurrentConfigId(config_id, self.modified_settings)
+      config = self.modified_settings[config_id]
+      sensor_data = [
+        f"S{sensor['id']}: coeff. {sensor['coefficient']}, RPM: {sensor['rpm']}"
+        for sensor in config["sensors"]
+      ]
+      text = (
+        f"Config name: {config['name']};  Main block RPM: {config['main_block']['rpm']}\n"
+        f"Sensors:\n"
+        f"\n".join(sensor_data)
+      )
+      # show list of config values as label
+      self.defaultValuesLabel.setText(text)
+      # gpio pins
+      for sensor in config["sensors"]:
+        for item in self.gpio_pins_items:
+          if item[1] == sensor["id"]:
+            item[0].setValue(sensor["gpio"])
 
   def gpioChanged(self, sensor_id, new_value) -> None:
     for sensor in self.modified_settings[self.configComboBox.currentData()]["sensors"]:
