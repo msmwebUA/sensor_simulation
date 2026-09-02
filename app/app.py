@@ -96,7 +96,7 @@ class App(QMainWindow, Ui_MainWindow):
         4: [True, self.controlS4Btn]
       }
       self.elapsed_timer.start()
-      sensors = self.settings_obj.current_settings[self.settings_obj.current_config_id]["sensors"]
+      sensors = self.settings_obj.current_settings[self.settings_obj.getCurrentConfigId(self.settings_obj.current_settings)]["sensors"]
       for sensor in sensors:
         rpm = sensor["rpm"]
         channel = DigitalOutputDevice(sensor["gpio"], active_high=True, initial_value=True)
@@ -174,13 +174,13 @@ class App(QMainWindow, Ui_MainWindow):
             "rpm": rpm_by_id[sensor["id"]].value(),
             "coefficient": coefficient_by_id[sensor["id"]].text()
           }
-          for sensor in self.settings_obj.current_settings[self.settings_obj.current_config_id]["sensors"]
+          for sensor in self.settings_obj.current_settings[self.settings_obj.getCurrentConfigId(self.settings_obj.current_settings)]["sensors"]
         ]
       }
     }
 
   def setPageItemsValues(self, settings: dict, update_combobox: bool = True) -> None:
-    current_config_id = self.settings_obj.current_config_id
+    current_config_id = self.settings_obj.getCurrentConfigId(self.settings_obj.current_settings)
     # update config combobox
     if update_combobox:
       self.configComboBox.clear()

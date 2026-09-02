@@ -11,10 +11,6 @@ class Settings:
     self.rpm_limit = 10001
     self.saved_settings = self.loadSettings()
     self.current_settings = copy.deepcopy(self.saved_settings)
-    if self.saved_settings:
-        self.current_config_id = self.getCurrentConfigId(self.saved_settings)
-    else:
-        self.current_config_id = None
   
   def loadSettings(self) -> dict:
     if not os.path.exists(self.settings_file):
@@ -42,7 +38,8 @@ class Settings:
   def updateCurrentSettings(self, config: dict) -> bool:
     # update current settings with values changed by user (in main window)
     try:
-      self.current_settings[self.current_config_id] = config[self.current_config_id]
+      current_config_id = self.getCurrentConfigId(self.current_settings)
+      self.current_settings[current_config_id] = config[current_config_id]
       return True
     except Exception as e:
       messages.ConsoleMessage.append(f"Error updating current settings: {e}")
@@ -176,9 +173,11 @@ class Settings:
     return first_key
   
   def setCurrentConfigId(self, config_id: str) -> None:
-    self.current_settings[self.current_config_id]["current"] = False
+    # unset current from other configs
+    for config in self.current_settings.values():
+      config["current"] = False 
+    # set current
     self.current_settings[config_id]["current"] = True
-    self.current_config_id = config_id
 
   def createConfigExample(self, config_id: str, config_name: str) -> dict:
     return {

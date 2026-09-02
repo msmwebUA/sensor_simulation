@@ -17,15 +17,16 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
     self.gpio_pins_items = [[self.sensor1Gpio, 1], [self.sensor2Gpio, 2], [self.sensor3Gpio, 3], [self.sensor4Gpio, 4]]
     
     # config combobox
+    current_config_id = self.settings_obj.getCurrentConfigId(self.settings_obj.current_settings)
     self.configComboBox.clear()
     for key, value in self.modified_settings.items():
       self.configComboBox.addItem(value["name"], key)
-    index = self.configComboBox.findData(self.settings_obj.current_config_id)
+    index = self.configComboBox.findData(current_config_id)
     if index != -1:
       self.configComboBox.setCurrentIndex(index)
     else:
       self.configComboBox.setCurrentIndex(0)
-      messages.showAlert(self, "Warning", f"Current config {self.settings_obj.current_config_id} not found in the saved settings, using first config", "warning")
+      messages.showAlert(self, "Warning", f"Current config {self.settings_obj[current_config_id]['name']} not found in the saved settings, using first config", "warning")
 
     # show or hide items
     self.showConfigItems()
@@ -132,7 +133,7 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
 
   def replaceValues(self) -> None:
     config_id = self.configComboBox.currentData()
-    self.modified_settings[config_id] = copy.deepcopy(self.settings_obj.current_settings[self.settings_obj.current_config_id])
+    self.modified_settings[config_id] = copy.deepcopy(self.settings_obj.current_settings[self.settings_obj.getCurrentConfigId(self.settings_obj.current_settings)])
     self.setPageItems()
   
   def setPageItems(self) -> None:
