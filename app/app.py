@@ -191,8 +191,8 @@ class App(QMainWindow, Ui_MainWindow):
         self.configComboBox.setCurrentIndex(index)
       else:
         self.configComboBox.setCurrentIndex(0)
-        messages.ConsoleMessage.append(f"Current config {current_config_id} not found on the page, using first config")
-        messages.showAlert(self, "Error", f"Current config {current_config_id} not found on the page, using first config", "critical")
+        messages.ConsoleMessage.append(f"Current config with ID {current_config_id} not found on the page, using first config")
+        messages.showAlert(self, "Error", f"Current config with ID {current_config_id} not found on the page, using first config", "critical")
     # main block
     for item in self.mainBlockItems:
       item[0].setValue(settings[current_config_id]["main_block"]["rpm"])
@@ -320,8 +320,9 @@ class App(QMainWindow, Ui_MainWindow):
 
   def configComboBoxChanged(self) -> None:
     config_id = self.configComboBox.currentData()
-    self.settings_obj.setCurrentConfigId(config_id, self.settings_obj.current_settings)
-    self.setPageItemsValues(self.settings_obj.current_settings, False)
+    if config_id:
+      self.settings_obj.setCurrentConfigId(config_id, self.settings_obj.current_settings)
+      self.setPageItemsValues(self.settings_obj.current_settings, False) 
 
   # DIALOG
 
