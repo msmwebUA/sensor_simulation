@@ -155,7 +155,7 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
       ]
       sensors_joined = "\n".join(sensor_data)
       text = (
-          f"Config name: {config['name']};  Main block RPM: {config['main_block']['rpm']}\n"
+          f"Config: {config['name']}; MainBlockRPM: {config['main_block']['rpm']}\n"
           f"Sensors:\n"
           f"{sensors_joined}"
       )
