@@ -58,6 +58,7 @@ class App(QMainWindow, Ui_MainWindow):
     self.resetConfigBtn.clicked.connect(self.resetConfig)
     self.configComboBox.currentIndexChanged.connect(self.configComboBoxChanged)
     self.manualRpmCheckBox.stateChanged.connect(self.manualRpmCheckBoxChanged)
+    self.clearConsoleBtn.clicked.connect(messages.ConsoleMessage.clear)
     self.simulationBtn.clicked.connect(self.simulation)
     self.controlS1Btn.clicked.connect(lambda _: self.controlSensor(1))
     self.controlS2Btn.clicked.connect(lambda _: self.controlSensor(2))

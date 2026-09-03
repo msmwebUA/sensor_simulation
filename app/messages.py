@@ -44,3 +44,10 @@ class ConsoleMessage:
       cls._widget.appendPlainText(message)
     else:
       print(f"Widget for console messages not set")
+
+  @classmethod
+  def clear(cls):
+    if cls._widget:
+      cls._widget.clear()
+    else:
+      print(f"Widget for console messages not set")
