@@ -66,7 +66,7 @@ class Settings:
     # validate configs
     config_names = []
     for config_key, config in settings.items():
-      location = f'Configuration "{config_key}"'
+      location = f'{config["name"]}'
       if not isinstance(config, dict):
         errors.append(f"{location} must be a dictionary.")
         continue
