@@ -36,8 +36,7 @@ class App(QMainWindow, Ui_MainWindow):
     if not self.settings_obj.saved_settings:
       messages.showAlert(self, "Error", f"Cannot run program. Settings file '{self.settings_obj.settings_file}' corrupted. Fix invalid values.", "critical")
       # close app
-      QApplication.instance().quit()
-      return
+      sys.exit(1)
     self.elapsed_timer = QElapsedTimer()
 
     self.channels = {}
@@ -158,8 +157,9 @@ class App(QMainWindow, Ui_MainWindow):
   # PAGE ITEMS
 
   def getPageItemsValues(self) -> dict:
-    coefficient_by_id = {sid: widget for widget, sid in self.coefficientItems}
-    rpm_by_id = {sid: widget for widget, sid in self.sensorRpmItems}
+    # dicts to map id to page item
+    coefficient_by_id = {sensor_id: page_item for page_item, sensor_id in self.coefficientItems}
+    rpm_by_id = {sensor_id: page_item for page_item, sensor_id in self.sensorRpmItems}
     return {
       self.configComboBox.currentData(): {
         "name": self.configComboBox.currentText(),
