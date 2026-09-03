@@ -144,10 +144,11 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
         f"S{sensor['id']}: coeff. {sensor['coefficient']}, RPM: {sensor['rpm']}"
         for sensor in config["sensors"]
       ]
+      sensors_joined = "\n".join(sensor_data)
       text = (
-        f"Config name: {config['name']};  Main block RPM: {config['main_block']['rpm']}\n"
-        f"Sensors:\n"
-        f"\n".join(sensor_data)
+          f"Config name: {config['name']};  Main block RPM: {config['main_block']['rpm']}\n"
+          f"Sensors:\n"
+          f"{sensors_joined}"
       )
       # show list of config values as label
       self.defaultValuesLabel.setText(text)
