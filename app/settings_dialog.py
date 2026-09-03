@@ -132,6 +132,7 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
   def replaceValues(self) -> None:
     config_id = self.configComboBox.currentData()
     self.modified_settings[config_id] = copy.deepcopy(self.settings_obj.current_settings[self.settings_obj.getCurrentConfigId(self.settings_obj.current_settings)])
+    self.modified_settings[config_id]["name"] = self.configComboBox.currentText()
     self.setPageItems()
   
   def setPageItems(self) -> None:
@@ -175,7 +176,10 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
       confirm = messages.showConfirmation(self, "Save changes", "Changes were made. Save them?")
       if confirm:
         self.save()
-    self.reject()
+      else:
+        self.reject()
+    else:
+      self.reject()
 
   def save(self) -> None:
     if self.settings_obj.saveSettings(self.modified_settings):
