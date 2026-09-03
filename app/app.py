@@ -241,10 +241,10 @@ class App(QMainWindow, Ui_MainWindow):
       self.simulationBtn.setEnabled(False)
       return
     if self.settings_obj.updateCurrentSettings(edited_values):
-      self.simulationBtn.setEnabled(True)
       self.block_page_items_changed = True
       try:
         self.setPageItemsValues(self.settings_obj.current_settings, False) # false -> don't update combobox
+        self.simulationBtn.setEnabled(True)
       finally:
         self.block_page_items_changed = False
     else:
@@ -293,7 +293,7 @@ class App(QMainWindow, Ui_MainWindow):
       errors_set = set(errors)
       for error in errors_set:
         messages.ConsoleMessage.append(error)
-      messages.showAlert(self, "Warning", "Cannot calculate values. Check console for details", "warning")
+      # messages.showAlert(self, "Warning", "Cannot calculate values. Check console for details", "warning")
       errors.clear()
       errors_set.clear()
       return None
@@ -343,7 +343,7 @@ class App(QMainWindow, Ui_MainWindow):
       for item in self.sensorRpmItems:
         item[0].setEnabled(False)
     self.settingsBtn.setEnabled(True)
-    self.resetConfigBtn.setEnabled(False)
+    self.resetConfigBtn.setEnabled(True)
     self.clearConsoleBtn.setEnabled(True)
 
   def hideSensorControlButtons(self) -> None:
@@ -361,6 +361,7 @@ class App(QMainWindow, Ui_MainWindow):
       self.block_page_items_changed = True
       try:
         self.setPageItemsValues(self.settings_obj.current_settings, False) # false -> don't update combobox
+        self.simulationBtn.setEnabled(True)
       finally:
         self.block_page_items_changed = False
 
