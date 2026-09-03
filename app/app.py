@@ -345,3 +345,24 @@ class App(QMainWindow, Ui_MainWindow):
         self.setPageItemsValues(self.settings_obj.current_settings, True) # true -> also update combobox
       finally:
         self.block_page_items_changed = False
+  
+  # CUSTOM CLOSE
+
+  def closeEvent(self, event: QCloseEvent) -> None:
+    if self.simulationStarted:
+      stay_in_program = messages.showConfirmation(self, "Simulation running", "Simulation is currently running. Do you want to stay in the program?")
+      if stay_in_program:
+        event.ignore()
+        return
+      self.simulationStop()
+
+    has_unsaved_changes = (self.settings_obj.current_settings != self.settings_obj.saved_settings)
+
+    if has_unsaved_changes:
+      save_changes = messages.showConfirmation(self, "Save changes?", "Changes to configuration were made or default config was changed. Save changes?")
+      if save_changes:
+        if not self.settings_obj.saveSettings(self.settings_obj.current_settings):
+          event.ignore()
+          return
+
+    event.accept()
