@@ -341,10 +341,10 @@
   <widget class="QFrame" name="bottomBarFrame">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>0</y>
-     <width>664</width>
-     <height>51</height>
+     <x>15</x>
+     <y>1</y>
+     <width>761</width>
+     <height>52</height>
     </rect>
    </property>
    <property name="frameShape">
@@ -472,7 +472,7 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>120</width>
+           <width>16777215</width>
            <height>16777215</height>
           </size>
          </property>
@@ -493,7 +493,7 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>50</width>
+           <width>70</width>
            <height>16777215</height>
           </size>
          </property>
@@ -502,10 +502,31 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="cancelConfigNameBtn">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>70</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Cancel</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
    </layout>
+   <zorder>editConfigNameFrame</zorder>
+   <zorder>actionsButtonsFrame</zorder>
   </widget>
  </widget>
  <resources/>

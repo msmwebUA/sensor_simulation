@@ -156,7 +156,7 @@ class Ui_settingsDialog(object):
 
         self.bottomBarFrame = QFrame(settingsDialog)
         self.bottomBarFrame.setObjectName(u"bottomBarFrame")
-        self.bottomBarFrame.setGeometry(QRect(20, 0, 664, 51))
+        self.bottomBarFrame.setGeometry(QRect(15, 1, 761, 52))
         self.bottomBarFrame.setFrameShape(QFrame.Shape.NoFrame)
         self.bottomBarFrame.setFrameShadow(QFrame.Shadow.Raised)
         self.horizontalLayout_4 = QHBoxLayout(self.bottomBarFrame)
@@ -219,7 +219,7 @@ class Ui_settingsDialog(object):
         self.configName = QLineEdit(self.editConfigNameFrame)
         self.configName.setObjectName(u"configName")
         self.configName.setMinimumSize(QSize(90, 0))
-        self.configName.setMaximumSize(QSize(120, 16777215))
+        self.configName.setMaximumSize(QSize(16777215, 16777215))
         self.configName.setFont(font3)
 
         self.horizontalLayout_2.addWidget(self.configName)
@@ -227,13 +227,22 @@ class Ui_settingsDialog(object):
         self.saveConfigNameBtn = QPushButton(self.editConfigNameFrame)
         self.saveConfigNameBtn.setObjectName(u"saveConfigNameBtn")
         self.saveConfigNameBtn.setMinimumSize(QSize(0, 0))
-        self.saveConfigNameBtn.setMaximumSize(QSize(50, 16777215))
+        self.saveConfigNameBtn.setMaximumSize(QSize(70, 16777215))
 
         self.horizontalLayout_2.addWidget(self.saveConfigNameBtn)
+
+        self.cancelConfigNameBtn = QPushButton(self.editConfigNameFrame)
+        self.cancelConfigNameBtn.setObjectName(u"cancelConfigNameBtn")
+        self.cancelConfigNameBtn.setMinimumSize(QSize(0, 0))
+        self.cancelConfigNameBtn.setMaximumSize(QSize(70, 16777215))
+
+        self.horizontalLayout_2.addWidget(self.cancelConfigNameBtn)
 
 
         self.horizontalLayout_4.addWidget(self.editConfigNameFrame)
 
+        self.editConfigNameFrame.raise_()
+        self.actionsButtonsFrame.raise_()
 
         self.retranslateUi(settingsDialog)
 
@@ -257,5 +266,6 @@ class Ui_settingsDialog(object):
         self.deleteConfigBtn.setText(QCoreApplication.translate("settingsDialog", u"\u2716\ufe0f", None))
         self.configNameLabel.setText(QCoreApplication.translate("settingsDialog", u"New config", None))
         self.saveConfigNameBtn.setText(QCoreApplication.translate("settingsDialog", u"OK", None))
+        self.cancelConfigNameBtn.setText(QCoreApplication.translate("settingsDialog", u"Cancel", None))
     # retranslateUi
 

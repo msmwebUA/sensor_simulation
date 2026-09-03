@@ -195,9 +195,15 @@
                <rect>
                 <x>0</x>
                 <y>44</y>
-                <width>184</width>
+                <width>195</width>
                 <height>90</height>
                </rect>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>195</width>
+                <height>0</height>
+               </size>
               </property>
               <property name="maximumSize">
                <size>
@@ -702,7 +708,7 @@
                <rect>
                 <x>10</x>
                 <y>20</y>
-                <width>211</width>
+                <width>111</width>
                 <height>17</height>
                </rect>
               </property>
@@ -714,6 +720,52 @@
               </property>
               <property name="text">
                <string>Main Block</string>
+              </property>
+             </widget>
+             <widget class="QPushButton" name="resetConfigBtn">
+              <property name="geometry">
+               <rect>
+                <x>140</x>
+                <y>15</y>
+                <width>80</width>
+                <height>30</height>
+               </rect>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>80</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string>🔄 Reset</string>
+              </property>
+              <property name="checkable">
+               <bool>false</bool>
+              </property>
+              <property name="flat">
+               <bool>false</bool>
               </property>
              </widget>
             </widget>
@@ -736,6 +788,46 @@
               <number>0</number>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QPushButton" name="clearConsoleBtn">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>40</width>
+                  <height>40</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>11</pointsize>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true"/>
+                </property>
+                <property name="text">
+                 <string extracomment="Clear console">🆑</string>
+                </property>
+                <property name="checkable">
+                 <bool>false</bool>
+                </property>
+                <property name="flat">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
               <item>
                <spacer name="navFrameSpacer1">
                 <property name="orientation">
