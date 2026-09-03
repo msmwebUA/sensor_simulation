@@ -38,11 +38,11 @@ class Settings:
       messages.ConsoleMessage.append(f"Error loading settings: {e}")
     return None
   
-  def updateCurrentSettings(self, config: dict) -> bool:
+  def updateCurrentSettings(self, settings: dict) -> bool:
     # update current settings with values changed by user (in main window)
     try:
       current_config_id = self.getCurrentConfigId(self.current_settings)
-      self.current_settings[current_config_id] = config[current_config_id]
+      self.current_settings[current_config_id] = copy.deepcopy(settings[current_config_id])
       return True
     except Exception as e:
       messages.ConsoleMessage.append(f"Error updating current settings: {e}")
@@ -141,10 +141,12 @@ class Settings:
       errors.append(f"Configuration cannot be converted to JSON: {e}")
     # show errors and clear list
     if errors:
-      for error in errors:
+      errors_set = set(errors)
+      for error in errors_set:
         messages.ConsoleMessage.append(error)
-        messages.showAlert(None, "Error", error, "critical")
+      messages.showAlert(None, "Warning", "Settings validation failed. Check console for details", "warning")
       errors.clear()
+      errors_set.clear()
       return False
     # validation passed
     return True

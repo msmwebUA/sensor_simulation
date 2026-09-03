@@ -161,11 +161,12 @@ class App(QMainWindow, Ui_MainWindow):
   def resetConfig(self) -> None:
     current_config_id = self.settings_obj.getCurrentConfigId(self.settings_obj.current_settings)
     if self.configComboBox.currentData() == current_config_id:
-      update_success = self.settings_obj.updateCurrentSettings(self.settings_obj.saved_settings[current_config_id])
+      update_success = self.settings_obj.updateCurrentSettings(self.settings_obj.saved_settings)
       if update_success:
         self.block_page_items_changed = True
         try:
           self.setPageItemsValues(self.settings_obj.current_settings, False) # False -> don't update combobox
+          self.simulationBtn.setEnabled(True)
         finally:
           self.block_page_items_changed = False
       else:
@@ -289,9 +290,12 @@ class App(QMainWindow, Ui_MainWindow):
           except (ValueError, AttributeError):
             errors.append(f"Invalid coefficient format: {coefficient}. Expected format: x/y") 
     if errors:
-      for error in errors:
+      errors_set = set(errors)
+      for error in errors_set:
         messages.ConsoleMessage.append(error)
       messages.showAlert(self, "Warning", "Cannot calculate values. Check console for details", "warning")
+      errors.clear()
+      errors_set.clear()
       return None
     else:
       return edited_values
@@ -320,6 +324,7 @@ class App(QMainWindow, Ui_MainWindow):
       item[0].setEnabled(False)
     self.manualRpmCheckBox.setEnabled(False)
     self.settingsBtn.setEnabled(False)
+    self.resetConfigBtn.setEnabled(False)
     self.clearConsoleBtn.setEnabled(False)
 
   def unablePageItems(self) -> None:
@@ -338,6 +343,7 @@ class App(QMainWindow, Ui_MainWindow):
       for item in self.sensorRpmItems:
         item[0].setEnabled(False)
     self.settingsBtn.setEnabled(True)
+    self.resetConfigBtn.setEnabled(False)
     self.clearConsoleBtn.setEnabled(True)
 
   def hideSensorControlButtons(self) -> None:
@@ -366,6 +372,7 @@ class App(QMainWindow, Ui_MainWindow):
       self.block_page_items_changed = True
       try:
         self.setPageItemsValues(self.settings_obj.current_settings, True) # true -> also update combobox
+        self.simulationBtn.setEnabled(True)
       finally:
         self.block_page_items_changed = False
   
