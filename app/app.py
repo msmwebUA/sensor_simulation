@@ -55,6 +55,7 @@ class App(QMainWindow, Ui_MainWindow):
 
     # connect slots (methods) to buttons on signals (events)
     self.settingsBtn.clicked.connect(self.showSettingsDialog)
+    self.resetConfigBtn.clicked.connect(self.resetConfig)
     self.configComboBox.currentIndexChanged.connect(self.configComboBoxChanged)
     self.manualRpmCheckBox.stateChanged.connect(self.manualRpmCheckBoxChanged)
     self.simulationBtn.clicked.connect(self.simulation)
@@ -155,6 +156,22 @@ class App(QMainWindow, Ui_MainWindow):
       return f"{minutes}m {seconds}s"
     else:
       return f"{seconds}.{millis:03d}s"
+
+  def resetConfig(self) -> None:
+    current_config_id = self.settings_obj.getCurrentConfigId(self.settings_obj.current_settings)
+    if self.configComboBox.currentData() == current_config_id:
+      update_success = self.settings_obj.updateCurrentSettings(self.settings_obj.saved_settings[current_config_id])
+      if update_success:
+        self.block_page_items_changed = True
+        try:
+          self.setPageItemsValues(self.settings_obj.current_settings, False) # False -> don't update combobox
+        finally:
+          self.block_page_items_changed = False
+      else:
+        messages.showAlert(self, "Error", f"Cannot reset config. Saved settings corrupted or current config not found", "critical")
+        messages.ConsoleMessage.append(f"Cannot reset config. Saved settings corrupted or current config not found")
+    else:
+      messages.ConsoleMessage.append(f'Cannot reset config.  Status "Current" of config on the page is different from saved settings')
 
   # PAGE ITEMS
 
