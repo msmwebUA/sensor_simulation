@@ -25,77 +25,6 @@ class Ui_settingsDialog(object):
             settingsDialog.setObjectName(u"settingsDialog")
         settingsDialog.resize(800, 240)
         settingsDialog.setModal(True)
-        self.actionsButtonsFrame = QFrame(settingsDialog)
-        self.actionsButtonsFrame.setObjectName(u"actionsButtonsFrame")
-        self.actionsButtonsFrame.setGeometry(QRect(10, 0, 582, 56))
-        self.actionsButtonsFrame.setFrameShape(QFrame.Shape.NoFrame)
-        self.actionsButtonsFrame.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout_2 = QHBoxLayout(self.actionsButtonsFrame)
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.configLabel = QLabel(self.actionsButtonsFrame)
-        self.configLabel.setObjectName(u"configLabel")
-        font = QFont()
-        font.setPointSize(14)
-        font.setBold(True)
-        self.configLabel.setFont(font)
-
-        self.horizontalLayout_2.addWidget(self.configLabel)
-
-        self.configComboBox = QComboBox(self.actionsButtonsFrame)
-        self.configComboBox.setObjectName(u"configComboBox")
-        self.configComboBox.setMinimumSize(QSize(0, 37))
-
-        self.horizontalLayout_2.addWidget(self.configComboBox)
-
-        self.manageConfigBtnsFrame = QFrame(self.actionsButtonsFrame)
-        self.manageConfigBtnsFrame.setObjectName(u"manageConfigBtnsFrame")
-        self.manageConfigBtnsFrame.setFrameShape(QFrame.Shape.NoFrame)
-        self.manageConfigBtnsFrame.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout = QHBoxLayout(self.manageConfigBtnsFrame)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalLayout.setContentsMargins(1, 1, 1, 1)
-        self.addConfigBtn = QPushButton(self.manageConfigBtnsFrame)
-        self.addConfigBtn.setObjectName(u"addConfigBtn")
-        self.addConfigBtn.setMaximumSize(QSize(42, 16777215))
-
-        self.horizontalLayout.addWidget(self.addConfigBtn)
-
-        self.renameConfigBtn = QPushButton(self.manageConfigBtnsFrame)
-        self.renameConfigBtn.setObjectName(u"renameConfigBtn")
-        self.renameConfigBtn.setMaximumSize(QSize(42, 16777215))
-
-        self.horizontalLayout.addWidget(self.renameConfigBtn)
-
-        self.deleteConfigBtn = QPushButton(self.manageConfigBtnsFrame)
-        self.deleteConfigBtn.setObjectName(u"deleteConfigBtn")
-        self.deleteConfigBtn.setMaximumSize(QSize(42, 16777215))
-
-        self.horizontalLayout.addWidget(self.deleteConfigBtn)
-
-
-        self.horizontalLayout_2.addWidget(self.manageConfigBtnsFrame)
-
-        self.configNameLabel = QLabel(self.actionsButtonsFrame)
-        self.configNameLabel.setObjectName(u"configNameLabel")
-        self.configNameLabel.setFont(font)
-
-        self.horizontalLayout_2.addWidget(self.configNameLabel)
-
-        self.configName = QLineEdit(self.actionsButtonsFrame)
-        self.configName.setObjectName(u"configName")
-        self.configName.setMinimumSize(QSize(0, 25))
-        self.configName.setMaximumSize(QSize(60, 16777215))
-        font1 = QFont()
-        font1.setPointSize(14)
-        self.configName.setFont(font1)
-
-        self.horizontalLayout_2.addWidget(self.configName)
-
-        self.saveConfigNameBtn = QPushButton(self.actionsButtonsFrame)
-        self.saveConfigNameBtn.setObjectName(u"saveConfigNameBtn")
-
-        self.horizontalLayout_2.addWidget(self.saveConfigNameBtn)
-
         self.mainFrame = QFrame(settingsDialog)
         self.mainFrame.setObjectName(u"mainFrame")
         self.mainFrame.setGeometry(QRect(10, 40, 781, 161))
@@ -109,10 +38,15 @@ class Ui_settingsDialog(object):
         self.defaultValuesLabel = QLabel(self.defaultValuesFrame)
         self.defaultValuesLabel.setObjectName(u"defaultValuesLabel")
         self.defaultValuesLabel.setGeometry(QRect(10, 10, 371, 101))
+        font = QFont()
+        font.setFamilies([u"Courier New"])
+        font.setPointSize(10)
+        font.setBold(False)
         self.defaultValuesLabel.setFont(font)
+        self.defaultValuesLabel.setStyleSheet(u"background-color: rgb(255, 255, 255);")
         self.replaceWithCurrentValuesBtn = QPushButton(self.defaultValuesFrame)
         self.replaceWithCurrentValuesBtn.setObjectName(u"replaceWithCurrentValuesBtn")
-        self.replaceWithCurrentValuesBtn.setGeometry(QRect(200, 120, 181, 32))
+        self.replaceWithCurrentValuesBtn.setGeometry(QRect(200, 110, 181, 32))
         self.sensorGpioFrame = QFrame(self.mainFrame)
         self.sensorGpioFrame.setObjectName(u"sensorGpioFrame")
         self.sensorGpioFrame.setGeometry(QRect(410, 10, 241, 151))
@@ -120,11 +54,14 @@ class Ui_settingsDialog(object):
         self.sensorGpioFrame.setFrameShadow(QFrame.Shadow.Raised)
         self.sensorGpioLabel = QLabel(self.sensorGpioFrame)
         self.sensorGpioLabel.setObjectName(u"sensorGpioLabel")
-        self.sensorGpioLabel.setGeometry(QRect(13, 13, 131, 17))
-        self.sensorGpioLabel.setFont(font)
+        self.sensorGpioLabel.setGeometry(QRect(13, 13, 211, 17))
+        font1 = QFont()
+        font1.setPointSize(12)
+        font1.setBold(True)
+        self.sensorGpioLabel.setFont(font1)
         self.sensorGpioPinsFrame = QFrame(self.sensorGpioFrame)
         self.sensorGpioPinsFrame.setObjectName(u"sensorGpioPinsFrame")
-        self.sensorGpioPinsFrame.setGeometry(QRect(10, 36, 191, 94))
+        self.sensorGpioPinsFrame.setGeometry(QRect(10, 36, 188, 94))
         self.sensorGpioPinsFrame.setFrameShape(QFrame.Shape.NoFrame)
         self.sensorGpioPinsFrame.setFrameShadow(QFrame.Shadow.Raised)
         self.gridLayout = QGridLayout(self.sensorGpioPinsFrame)
@@ -132,7 +69,7 @@ class Ui_settingsDialog(object):
         self.s1Label = QLabel(self.sensorGpioPinsFrame)
         self.s1Label.setObjectName(u"s1Label")
         font2 = QFont()
-        font2.setPointSize(13)
+        font2.setPointSize(11)
         font2.setBold(True)
         self.s1Label.setFont(font2)
 
@@ -142,7 +79,9 @@ class Ui_settingsDialog(object):
         self.sensor1Gpio.setObjectName(u"sensor1Gpio")
         self.sensor1Gpio.setMinimumSize(QSize(0, 30))
         self.sensor1Gpio.setMaximumSize(QSize(70, 16777215))
-        self.sensor1Gpio.setFont(font1)
+        font3 = QFont()
+        font3.setPointSize(14)
+        self.sensor1Gpio.setFont(font3)
         self.sensor1Gpio.setFrame(True)
         self.sensor1Gpio.setMaximum(5000)
 
@@ -158,7 +97,7 @@ class Ui_settingsDialog(object):
         self.sensor3Gpio.setObjectName(u"sensor3Gpio")
         self.sensor3Gpio.setMinimumSize(QSize(0, 30))
         self.sensor3Gpio.setMaximumSize(QSize(70, 16777215))
-        self.sensor3Gpio.setFont(font1)
+        self.sensor3Gpio.setFont(font3)
         self.sensor3Gpio.setFrame(True)
         self.sensor3Gpio.setMaximum(5000)
 
@@ -174,7 +113,7 @@ class Ui_settingsDialog(object):
         self.sensor2Gpio.setObjectName(u"sensor2Gpio")
         self.sensor2Gpio.setMinimumSize(QSize(0, 30))
         self.sensor2Gpio.setMaximumSize(QSize(70, 16777215))
-        self.sensor2Gpio.setFont(font1)
+        self.sensor2Gpio.setFont(font3)
         self.sensor2Gpio.setFrame(True)
         self.sensor2Gpio.setMaximum(5000)
 
@@ -182,7 +121,7 @@ class Ui_settingsDialog(object):
 
         self.s4Label = QLabel(self.sensorGpioPinsFrame)
         self.s4Label.setObjectName(u"s4Label")
-        self.s4Label.setFont(font2)
+        self.s4Label.setFont(font1)
 
         self.gridLayout.addWidget(self.s4Label, 1, 2, 1, 1)
 
@@ -190,7 +129,7 @@ class Ui_settingsDialog(object):
         self.sensor4Gpio.setObjectName(u"sensor4Gpio")
         self.sensor4Gpio.setMinimumSize(QSize(0, 30))
         self.sensor4Gpio.setMaximumSize(QSize(70, 16777215))
-        self.sensor4Gpio.setFont(font1)
+        self.sensor4Gpio.setFont(font3)
         self.sensor4Gpio.setFrame(True)
         self.sensor4Gpio.setMaximum(5000)
 
@@ -198,7 +137,7 @@ class Ui_settingsDialog(object):
 
         self.dialogBtnsFrame = QFrame(settingsDialog)
         self.dialogBtnsFrame.setObjectName(u"dialogBtnsFrame")
-        self.dialogBtnsFrame.setGeometry(QRect(610, 190, 178, 51))
+        self.dialogBtnsFrame.setGeometry(QRect(610, 195, 178, 51))
         self.dialogBtnsFrame.setFrameShape(QFrame.Shape.NoFrame)
         self.dialogBtnsFrame.setFrameShadow(QFrame.Shadow.Raised)
         self.horizontalLayout_3 = QHBoxLayout(self.dialogBtnsFrame)
@@ -214,6 +153,86 @@ class Ui_settingsDialog(object):
 
         self.horizontalLayout_3.addWidget(self.saveBtn)
 
+        self.bottomBarFrame = QFrame(settingsDialog)
+        self.bottomBarFrame.setObjectName(u"bottomBarFrame")
+        self.bottomBarFrame.setGeometry(QRect(20, 0, 664, 51))
+        self.bottomBarFrame.setFrameShape(QFrame.Shape.NoFrame)
+        self.bottomBarFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_4 = QHBoxLayout(self.bottomBarFrame)
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.horizontalLayout_4.setContentsMargins(1, 1, 1, 1)
+        self.actionsButtonsFrame = QFrame(self.bottomBarFrame)
+        self.actionsButtonsFrame.setObjectName(u"actionsButtonsFrame")
+        self.actionsButtonsFrame.setFrameShape(QFrame.Shape.NoFrame)
+        self.actionsButtonsFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout = QHBoxLayout(self.actionsButtonsFrame)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.configLabel = QLabel(self.actionsButtonsFrame)
+        self.configLabel.setObjectName(u"configLabel")
+        font4 = QFont()
+        font4.setPointSize(14)
+        font4.setBold(True)
+        self.configLabel.setFont(font4)
+
+        self.horizontalLayout.addWidget(self.configLabel)
+
+        self.configComboBox = QComboBox(self.actionsButtonsFrame)
+        self.configComboBox.setObjectName(u"configComboBox")
+        self.configComboBox.setMinimumSize(QSize(0, 0))
+
+        self.horizontalLayout.addWidget(self.configComboBox)
+
+        self.addConfigBtn = QPushButton(self.actionsButtonsFrame)
+        self.addConfigBtn.setObjectName(u"addConfigBtn")
+        self.addConfigBtn.setMaximumSize(QSize(42, 16777215))
+
+        self.horizontalLayout.addWidget(self.addConfigBtn)
+
+        self.renameConfigBtn = QPushButton(self.actionsButtonsFrame)
+        self.renameConfigBtn.setObjectName(u"renameConfigBtn")
+        self.renameConfigBtn.setMaximumSize(QSize(42, 16777215))
+
+        self.horizontalLayout.addWidget(self.renameConfigBtn)
+
+        self.deleteConfigBtn = QPushButton(self.actionsButtonsFrame)
+        self.deleteConfigBtn.setObjectName(u"deleteConfigBtn")
+        self.deleteConfigBtn.setMaximumSize(QSize(42, 16777215))
+
+        self.horizontalLayout.addWidget(self.deleteConfigBtn)
+
+
+        self.horizontalLayout_4.addWidget(self.actionsButtonsFrame)
+
+        self.editConfigNameFrame = QFrame(self.bottomBarFrame)
+        self.editConfigNameFrame.setObjectName(u"editConfigNameFrame")
+        self.editConfigNameFrame.setFrameShape(QFrame.Shape.NoFrame)
+        self.editConfigNameFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_2 = QHBoxLayout(self.editConfigNameFrame)
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.configNameLabel = QLabel(self.editConfigNameFrame)
+        self.configNameLabel.setObjectName(u"configNameLabel")
+        self.configNameLabel.setFont(font1)
+
+        self.horizontalLayout_2.addWidget(self.configNameLabel)
+
+        self.configName = QLineEdit(self.editConfigNameFrame)
+        self.configName.setObjectName(u"configName")
+        self.configName.setMinimumSize(QSize(90, 0))
+        self.configName.setMaximumSize(QSize(16777215, 16777215))
+        self.configName.setFont(font3)
+
+        self.horizontalLayout_2.addWidget(self.configName)
+
+        self.saveConfigNameBtn = QPushButton(self.editConfigNameFrame)
+        self.saveConfigNameBtn.setObjectName(u"saveConfigNameBtn")
+        self.saveConfigNameBtn.setMinimumSize(QSize(0, 0))
+        self.saveConfigNameBtn.setMaximumSize(QSize(50, 16777215))
+
+        self.horizontalLayout_2.addWidget(self.saveConfigNameBtn)
+
+
+        self.horizontalLayout_4.addWidget(self.editConfigNameFrame)
+
 
         self.retranslateUi(settingsDialog)
 
@@ -222,12 +241,6 @@ class Ui_settingsDialog(object):
 
     def retranslateUi(self, settingsDialog):
         settingsDialog.setWindowTitle(QCoreApplication.translate("settingsDialog", u"Settings", None))
-        self.configLabel.setText(QCoreApplication.translate("settingsDialog", u"Config", None))
-        self.addConfigBtn.setText(QCoreApplication.translate("settingsDialog", u"\u2795", None))
-        self.renameConfigBtn.setText(QCoreApplication.translate("settingsDialog", u"\u270e", None))
-        self.deleteConfigBtn.setText(QCoreApplication.translate("settingsDialog", u"\u2573", None))
-        self.configNameLabel.setText(QCoreApplication.translate("settingsDialog", u"New config", None))
-        self.saveConfigNameBtn.setText(QCoreApplication.translate("settingsDialog", u"OK", None))
         self.defaultValuesLabel.setText(QCoreApplication.translate("settingsDialog", u"Config values", None))
         self.replaceWithCurrentValuesBtn.setText(QCoreApplication.translate("settingsDialog", u"Replace with current values", None))
         self.sensorGpioLabel.setText(QCoreApplication.translate("settingsDialog", u"Sensor GPIO Pins", None))
@@ -237,5 +250,11 @@ class Ui_settingsDialog(object):
         self.s4Label.setText(QCoreApplication.translate("settingsDialog", u"S4", None))
         self.cancelBtn.setText(QCoreApplication.translate("settingsDialog", u"Cancel", None))
         self.saveBtn.setText(QCoreApplication.translate("settingsDialog", u"\U0001f4be Save", None))
+        self.configLabel.setText(QCoreApplication.translate("settingsDialog", u"Config", None))
+        self.addConfigBtn.setText(QCoreApplication.translate("settingsDialog", u"\u2795", None))
+        self.renameConfigBtn.setText(QCoreApplication.translate("settingsDialog", u"\u270e", None))
+        self.deleteConfigBtn.setText(QCoreApplication.translate("settingsDialog", u"\u2716\ufe0f", None))
+        self.configNameLabel.setText(QCoreApplication.translate("settingsDialog", u"New config", None))
+        self.saveConfigNameBtn.setText(QCoreApplication.translate("settingsDialog", u"OK", None))
     # retranslateUi
 

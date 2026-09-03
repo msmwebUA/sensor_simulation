@@ -108,7 +108,7 @@ class Ui_MainWindow(object):
         self.mainFrame.setLineWidth(1)
         self.mainBlockRpmFrame = QFrame(self.mainFrame)
         self.mainBlockRpmFrame.setObjectName(u"mainBlockRpmFrame")
-        self.mainBlockRpmFrame.setGeometry(QRect(0, 44, 174, 90))
+        self.mainBlockRpmFrame.setGeometry(QRect(0, 44, 167, 90))
         self.mainBlockRpmFrame.setMaximumSize(QSize(16777215, 16777215))
         self.mainBlockRpmFrame.setFrameShape(QFrame.Shape.NoFrame)
         self.mainBlockRpmFrame.setFrameShadow(QFrame.Shadow.Raised)
@@ -117,7 +117,7 @@ class Ui_MainWindow(object):
         self.configLabel = QLabel(self.mainBlockRpmFrame)
         self.configLabel.setObjectName(u"configLabel")
         font1 = QFont()
-        font1.setPointSize(14)
+        font1.setPointSize(11)
         font1.setBold(True)
         self.configLabel.setFont(font1)
 
@@ -125,6 +125,10 @@ class Ui_MainWindow(object):
 
         self.configComboBox = QComboBox(self.mainBlockRpmFrame)
         self.configComboBox.setObjectName(u"configComboBox")
+        self.configComboBox.setMinimumSize(QSize(0, 0))
+        font2 = QFont()
+        font2.setPointSize(11)
+        self.configComboBox.setFont(font2)
 
         self.gridLayout_3.addWidget(self.configComboBox, 0, 1, 1, 1)
 
@@ -138,9 +142,9 @@ class Ui_MainWindow(object):
         self.mainBlockRpm.setObjectName(u"mainBlockRpm")
         self.mainBlockRpm.setMinimumSize(QSize(0, 30))
         self.mainBlockRpm.setMaximumSize(QSize(70, 16777215))
-        font2 = QFont()
-        font2.setPointSize(14)
-        self.mainBlockRpm.setFont(font2)
+        font3 = QFont()
+        font3.setPointSize(14)
+        self.mainBlockRpm.setFont(font3)
         self.mainBlockRpm.setFrame(True)
         self.mainBlockRpm.setMaximum(5000)
 
@@ -153,21 +157,21 @@ class Ui_MainWindow(object):
         self.coefficientsFrame.setFrameShadow(QFrame.Shadow.Raised)
         self.coefficientsLabel = QLabel(self.coefficientsFrame)
         self.coefficientsLabel.setObjectName(u"coefficientsLabel")
-        self.coefficientsLabel.setGeometry(QRect(13, 13, 151, 17))
-        self.coefficientsLabel.setFont(font1)
+        self.coefficientsLabel.setGeometry(QRect(13, 13, 211, 17))
+        font4 = QFont()
+        font4.setPointSize(12)
+        font4.setBold(True)
+        self.coefficientsLabel.setFont(font4)
         self.coefficientsChannelsFrame = QFrame(self.coefficientsFrame)
         self.coefficientsChannelsFrame.setObjectName(u"coefficientsChannelsFrame")
-        self.coefficientsChannelsFrame.setGeometry(QRect(10, 40, 231, 86))
+        self.coefficientsChannelsFrame.setGeometry(QRect(10, 40, 222, 84))
         self.coefficientsChannelsFrame.setFrameShape(QFrame.Shape.NoFrame)
         self.coefficientsChannelsFrame.setFrameShadow(QFrame.Shadow.Raised)
         self.gridLayout = QGridLayout(self.coefficientsChannelsFrame)
         self.gridLayout.setObjectName(u"gridLayout")
         self.coefficientLabel1 = QLabel(self.coefficientsChannelsFrame)
         self.coefficientLabel1.setObjectName(u"coefficientLabel1")
-        font3 = QFont()
-        font3.setPointSize(13)
-        font3.setBold(True)
-        self.coefficientLabel1.setFont(font3)
+        self.coefficientLabel1.setFont(font1)
 
         self.gridLayout.addWidget(self.coefficientLabel1, 0, 0, 1, 1)
 
@@ -175,13 +179,13 @@ class Ui_MainWindow(object):
         self.sensor1Coefficient.setObjectName(u"sensor1Coefficient")
         self.sensor1Coefficient.setMinimumSize(QSize(0, 25))
         self.sensor1Coefficient.setMaximumSize(QSize(60, 16777215))
-        self.sensor1Coefficient.setFont(font2)
+        self.sensor1Coefficient.setFont(font3)
 
         self.gridLayout.addWidget(self.sensor1Coefficient, 0, 1, 1, 1)
 
         self.coefficientLabel3 = QLabel(self.coefficientsChannelsFrame)
         self.coefficientLabel3.setObjectName(u"coefficientLabel3")
-        self.coefficientLabel3.setFont(font3)
+        self.coefficientLabel3.setFont(font1)
 
         self.gridLayout.addWidget(self.coefficientLabel3, 0, 2, 1, 1)
 
@@ -189,13 +193,13 @@ class Ui_MainWindow(object):
         self.sensor3Coefficient.setObjectName(u"sensor3Coefficient")
         self.sensor3Coefficient.setMinimumSize(QSize(0, 25))
         self.sensor3Coefficient.setMaximumSize(QSize(60, 16777215))
-        self.sensor3Coefficient.setFont(font2)
+        self.sensor3Coefficient.setFont(font3)
 
         self.gridLayout.addWidget(self.sensor3Coefficient, 0, 3, 1, 1)
 
         self.coefficientLabel2 = QLabel(self.coefficientsChannelsFrame)
         self.coefficientLabel2.setObjectName(u"coefficientLabel2")
-        self.coefficientLabel2.setFont(font3)
+        self.coefficientLabel2.setFont(font1)
 
         self.gridLayout.addWidget(self.coefficientLabel2, 1, 0, 1, 1)
 
@@ -203,13 +207,13 @@ class Ui_MainWindow(object):
         self.sensor2Coefficient.setObjectName(u"sensor2Coefficient")
         self.sensor2Coefficient.setMinimumSize(QSize(0, 25))
         self.sensor2Coefficient.setMaximumSize(QSize(60, 16777215))
-        self.sensor2Coefficient.setFont(font2)
+        self.sensor2Coefficient.setFont(font3)
 
         self.gridLayout.addWidget(self.sensor2Coefficient, 1, 1, 1, 1)
 
         self.coefficientLabel4 = QLabel(self.coefficientsChannelsFrame)
         self.coefficientLabel4.setObjectName(u"coefficientLabel4")
-        self.coefficientLabel4.setFont(font3)
+        self.coefficientLabel4.setFont(font1)
 
         self.gridLayout.addWidget(self.coefficientLabel4, 1, 2, 1, 1)
 
@@ -217,7 +221,7 @@ class Ui_MainWindow(object):
         self.sensor4Coefficient.setObjectName(u"sensor4Coefficient")
         self.sensor4Coefficient.setMinimumSize(QSize(0, 25))
         self.sensor4Coefficient.setMaximumSize(QSize(60, 16777215))
-        self.sensor4Coefficient.setFont(font2)
+        self.sensor4Coefficient.setFont(font3)
 
         self.gridLayout.addWidget(self.sensor4Coefficient, 1, 3, 1, 1)
 
@@ -228,74 +232,74 @@ class Ui_MainWindow(object):
         self.rpmPerSensorFrame.setFrameShadow(QFrame.Shadow.Raised)
         self.rpmPerSensorLabel = QLabel(self.rpmPerSensorFrame)
         self.rpmPerSensorLabel.setObjectName(u"rpmPerSensorLabel")
-        self.rpmPerSensorLabel.setGeometry(QRect(13, 13, 83, 17))
-        self.rpmPerSensorLabel.setFont(font1)
+        self.rpmPerSensorLabel.setGeometry(QRect(13, 13, 131, 17))
+        self.rpmPerSensorLabel.setFont(font4)
         self.sensorRpmFrame = QFrame(self.rpmPerSensorFrame)
         self.sensorRpmFrame.setObjectName(u"sensorRpmFrame")
-        self.sensorRpmFrame.setGeometry(QRect(10, 36, 231, 86))
+        self.sensorRpmFrame.setGeometry(QRect(10, 36, 219, 94))
         self.sensorRpmFrame.setFrameShape(QFrame.Shape.NoFrame)
         self.sensorRpmFrame.setFrameShadow(QFrame.Shadow.Raised)
         self.gridLayout_2 = QGridLayout(self.sensorRpmFrame)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.sensorRpmLabel1 = QLabel(self.sensorRpmFrame)
         self.sensorRpmLabel1.setObjectName(u"sensorRpmLabel1")
-        self.sensorRpmLabel1.setFont(font3)
+        self.sensorRpmLabel1.setFont(font1)
 
         self.gridLayout_2.addWidget(self.sensorRpmLabel1, 0, 0, 1, 1)
-
-        self.sensorRpmLabel3 = QLabel(self.sensorRpmFrame)
-        self.sensorRpmLabel3.setObjectName(u"sensorRpmLabel3")
-        self.sensorRpmLabel3.setFont(font3)
-
-        self.gridLayout_2.addWidget(self.sensorRpmLabel3, 0, 2, 1, 1)
-
-        self.sensorRpmLabel2 = QLabel(self.sensorRpmFrame)
-        self.sensorRpmLabel2.setObjectName(u"sensorRpmLabel2")
-        self.sensorRpmLabel2.setFont(font3)
-
-        self.gridLayout_2.addWidget(self.sensorRpmLabel2, 1, 0, 1, 1)
-
-        self.sensorRpmLabel4 = QLabel(self.sensorRpmFrame)
-        self.sensorRpmLabel4.setObjectName(u"sensorRpmLabel4")
-        self.sensorRpmLabel4.setFont(font3)
-
-        self.gridLayout_2.addWidget(self.sensorRpmLabel4, 1, 2, 1, 1)
 
         self.sensor1Rpm = QSpinBox(self.sensorRpmFrame)
         self.sensor1Rpm.setObjectName(u"sensor1Rpm")
         self.sensor1Rpm.setMinimumSize(QSize(0, 30))
         self.sensor1Rpm.setMaximumSize(QSize(70, 16777215))
-        self.sensor1Rpm.setFont(font2)
+        self.sensor1Rpm.setFont(font3)
         self.sensor1Rpm.setFrame(True)
         self.sensor1Rpm.setMaximum(5000)
 
         self.gridLayout_2.addWidget(self.sensor1Rpm, 0, 1, 1, 1)
 
-        self.sensor2Rpm = QSpinBox(self.sensorRpmFrame)
-        self.sensor2Rpm.setObjectName(u"sensor2Rpm")
-        self.sensor2Rpm.setMinimumSize(QSize(0, 30))
-        self.sensor2Rpm.setMaximumSize(QSize(70, 16777215))
-        self.sensor2Rpm.setFont(font2)
-        self.sensor2Rpm.setFrame(True)
-        self.sensor2Rpm.setMaximum(5000)
+        self.sensorRpmLabel3 = QLabel(self.sensorRpmFrame)
+        self.sensorRpmLabel3.setObjectName(u"sensorRpmLabel3")
+        self.sensorRpmLabel3.setFont(font1)
 
-        self.gridLayout_2.addWidget(self.sensor2Rpm, 1, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.sensorRpmLabel3, 0, 2, 1, 1)
 
         self.sensor3Rpm = QSpinBox(self.sensorRpmFrame)
         self.sensor3Rpm.setObjectName(u"sensor3Rpm")
         self.sensor3Rpm.setMinimumSize(QSize(0, 30))
         self.sensor3Rpm.setMaximumSize(QSize(70, 16777215))
-        self.sensor3Rpm.setFont(font2)
+        self.sensor3Rpm.setFont(font3)
         self.sensor3Rpm.setFrame(True)
         self.sensor3Rpm.setMaximum(5000)
 
         self.gridLayout_2.addWidget(self.sensor3Rpm, 0, 3, 1, 1)
 
+        self.sensorRpmLabel2 = QLabel(self.sensorRpmFrame)
+        self.sensorRpmLabel2.setObjectName(u"sensorRpmLabel2")
+        self.sensorRpmLabel2.setFont(font1)
+
+        self.gridLayout_2.addWidget(self.sensorRpmLabel2, 1, 0, 1, 1)
+
+        self.sensor2Rpm = QSpinBox(self.sensorRpmFrame)
+        self.sensor2Rpm.setObjectName(u"sensor2Rpm")
+        self.sensor2Rpm.setMinimumSize(QSize(0, 30))
+        self.sensor2Rpm.setMaximumSize(QSize(70, 16777215))
+        self.sensor2Rpm.setFont(font3)
+        self.sensor2Rpm.setFrame(True)
+        self.sensor2Rpm.setMaximum(5000)
+
+        self.gridLayout_2.addWidget(self.sensor2Rpm, 1, 1, 1, 1)
+
+        self.sensorRpmLabel4 = QLabel(self.sensorRpmFrame)
+        self.sensorRpmLabel4.setObjectName(u"sensorRpmLabel4")
+        self.sensorRpmLabel4.setFont(font1)
+
+        self.gridLayout_2.addWidget(self.sensorRpmLabel4, 1, 2, 1, 1)
+
         self.sensor4Rpm = QSpinBox(self.sensorRpmFrame)
         self.sensor4Rpm.setObjectName(u"sensor4Rpm")
         self.sensor4Rpm.setMinimumSize(QSize(0, 30))
         self.sensor4Rpm.setMaximumSize(QSize(70, 16777215))
-        self.sensor4Rpm.setFont(font2)
+        self.sensor4Rpm.setFont(font3)
         self.sensor4Rpm.setFrame(True)
         self.sensor4Rpm.setMaximum(5000)
 
@@ -303,11 +307,11 @@ class Ui_MainWindow(object):
 
         self.manualRpmCheckBox = QCheckBox(self.rpmPerSensorFrame)
         self.manualRpmCheckBox.setObjectName(u"manualRpmCheckBox")
-        self.manualRpmCheckBox.setGeometry(QRect(140, 20, 85, 20))
+        self.manualRpmCheckBox.setGeometry(QRect(150, 20, 85, 20))
         self.mainBlockLabel = QLabel(self.mainFrame)
         self.mainBlockLabel.setObjectName(u"mainBlockLabel")
-        self.mainBlockLabel.setGeometry(QRect(10, 20, 150, 17))
-        self.mainBlockLabel.setFont(font1)
+        self.mainBlockLabel.setGeometry(QRect(10, 20, 211, 17))
+        self.mainBlockLabel.setFont(font4)
 
         self.verticalLayout_5.addWidget(self.mainFrame)
 
@@ -329,9 +333,6 @@ class Ui_MainWindow(object):
         self.simulationBtn.setSizePolicy(sizePolicy)
         self.simulationBtn.setMinimumSize(QSize(150, 40))
         self.simulationBtn.setMaximumSize(QSize(90, 50))
-        font4 = QFont()
-        font4.setPointSize(15)
-        font4.setBold(True)
         self.simulationBtn.setFont(font4)
         self.simulationBtn.setStyleSheet(u"")
         self.simulationBtn.setCheckable(False)

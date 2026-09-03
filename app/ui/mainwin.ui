@@ -195,7 +195,7 @@
                <rect>
                 <x>0</x>
                 <y>44</y>
-                <width>174</width>
+                <width>167</width>
                 <height>90</height>
                </rect>
               </property>
@@ -216,7 +216,7 @@
                 <widget class="QLabel" name="configLabel">
                  <property name="font">
                   <font>
-                   <pointsize>14</pointsize>
+                   <pointsize>11</pointsize>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -226,13 +226,25 @@
                 </widget>
                </item>
                <item row="0" column="1">
-                <widget class="QComboBox" name="configComboBox"/>
+                <widget class="QComboBox" name="configComboBox">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
+                </widget>
                </item>
                <item row="1" column="0">
                 <widget class="QLabel" name="mainBlockRpmLabel">
                  <property name="font">
                   <font>
-                   <pointsize>14</pointsize>
+                   <pointsize>11</pointsize>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -290,13 +302,13 @@
                 <rect>
                  <x>13</x>
                  <y>13</y>
-                 <width>151</width>
+                 <width>211</width>
                  <height>17</height>
                 </rect>
                </property>
                <property name="font">
                 <font>
-                 <pointsize>14</pointsize>
+                 <pointsize>12</pointsize>
                  <bold>true</bold>
                 </font>
                </property>
@@ -309,8 +321,8 @@
                 <rect>
                  <x>10</x>
                  <y>40</y>
-                 <width>231</width>
-                 <height>86</height>
+                 <width>222</width>
+                 <height>84</height>
                 </rect>
                </property>
                <property name="frameShape">
@@ -324,7 +336,7 @@
                  <widget class="QLabel" name="coefficientLabel1">
                   <property name="font">
                    <font>
-                    <pointsize>13</pointsize>
+                    <pointsize>11</pointsize>
                     <bold>true</bold>
                    </font>
                   </property>
@@ -358,7 +370,7 @@
                  <widget class="QLabel" name="coefficientLabel3">
                   <property name="font">
                    <font>
-                    <pointsize>13</pointsize>
+                    <pointsize>11</pointsize>
                     <bold>true</bold>
                    </font>
                   </property>
@@ -392,7 +404,7 @@
                  <widget class="QLabel" name="coefficientLabel2">
                   <property name="font">
                    <font>
-                    <pointsize>13</pointsize>
+                    <pointsize>11</pointsize>
                     <bold>true</bold>
                    </font>
                   </property>
@@ -426,7 +438,7 @@
                  <widget class="QLabel" name="coefficientLabel4">
                   <property name="font">
                    <font>
-                    <pointsize>13</pointsize>
+                    <pointsize>11</pointsize>
                     <bold>true</bold>
                    </font>
                   </property>
@@ -479,13 +491,13 @@
                 <rect>
                  <x>13</x>
                  <y>13</y>
-                 <width>83</width>
+                 <width>131</width>
                  <height>17</height>
                 </rect>
                </property>
                <property name="font">
                 <font>
-                 <pointsize>14</pointsize>
+                 <pointsize>12</pointsize>
                  <bold>true</bold>
                 </font>
                </property>
@@ -498,8 +510,8 @@
                 <rect>
                  <x>10</x>
                  <y>36</y>
-                 <width>231</width>
-                 <height>86</height>
+                 <width>219</width>
+                 <height>94</height>
                 </rect>
                </property>
                <property name="frameShape">
@@ -513,51 +525,12 @@
                  <widget class="QLabel" name="sensorRpmLabel1">
                   <property name="font">
                    <font>
-                    <pointsize>13</pointsize>
+                    <pointsize>11</pointsize>
                     <bold>true</bold>
                    </font>
                   </property>
                   <property name="text">
                    <string>S1</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QLabel" name="sensorRpmLabel3">
-                  <property name="font">
-                   <font>
-                    <pointsize>13</pointsize>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>S3</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="sensorRpmLabel2">
-                  <property name="font">
-                   <font>
-                    <pointsize>13</pointsize>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>S2</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QLabel" name="sensorRpmLabel4">
-                  <property name="font">
-                   <font>
-                    <pointsize>13</pointsize>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>S4</string>
                   </property>
                  </widget>
                 </item>
@@ -588,30 +561,16 @@
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="1">
-                 <widget class="QSpinBox" name="sensor2Rpm">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>70</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
+                <item row="0" column="2">
+                 <widget class="QLabel" name="sensorRpmLabel3">
                   <property name="font">
                    <font>
-                    <pointsize>14</pointsize>
+                    <pointsize>11</pointsize>
+                    <bold>true</bold>
                    </font>
                   </property>
-                  <property name="frame">
-                   <bool>true</bool>
-                  </property>
-                  <property name="maximum">
-                   <number>5000</number>
+                  <property name="text">
+                   <string>S3</string>
                   </property>
                  </widget>
                 </item>
@@ -639,6 +598,59 @@
                   </property>
                   <property name="maximum">
                    <number>5000</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="sensorRpmLabel2">
+                  <property name="font">
+                   <font>
+                    <pointsize>11</pointsize>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>S2</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QSpinBox" name="sensor2Rpm">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>70</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>14</pointsize>
+                   </font>
+                  </property>
+                  <property name="frame">
+                   <bool>true</bool>
+                  </property>
+                  <property name="maximum">
+                   <number>5000</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QLabel" name="sensorRpmLabel4">
+                  <property name="font">
+                   <font>
+                    <pointsize>11</pointsize>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>S4</string>
                   </property>
                  </widget>
                 </item>
@@ -674,7 +686,7 @@
               <widget class="QCheckBox" name="manualRpmCheckBox">
                <property name="geometry">
                 <rect>
-                 <x>140</x>
+                 <x>150</x>
                  <y>20</y>
                  <width>85</width>
                  <height>20</height>
@@ -690,13 +702,13 @@
                <rect>
                 <x>10</x>
                 <y>20</y>
-                <width>150</width>
+                <width>211</width>
                 <height>17</height>
                </rect>
               </property>
               <property name="font">
                <font>
-                <pointsize>14</pointsize>
+                <pointsize>12</pointsize>
                 <bold>true</bold>
                </font>
               </property>
@@ -759,7 +771,7 @@
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>15</pointsize>
+                  <pointsize>12</pointsize>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -812,7 +824,7 @@
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>15</pointsize>
+                  <pointsize>12</pointsize>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -852,7 +864,7 @@
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>15</pointsize>
+                  <pointsize>12</pointsize>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -892,7 +904,7 @@
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>15</pointsize>
+                  <pointsize>12</pointsize>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -932,7 +944,7 @@
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>15</pointsize>
+                  <pointsize>12</pointsize>
                   <bold>true</bold>
                  </font>
                 </property>
