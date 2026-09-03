@@ -123,7 +123,7 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
     self.showConfigItems()
   
   def deleteConfig(self) -> None:
-    confirm = messages.showConfirmation(self, "Delete config", "Are you sure you want to delete this config?")
+    confirm = messages.showConfirmation(self, "Delete config", "Are you sure you want to delete this config? Note: Config will be finally deleted only after saving changes")
     if confirm:
       # delete config
       self.modified_settings.pop(self.configComboBox.currentData())
