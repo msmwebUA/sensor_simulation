@@ -38,6 +38,7 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
     self.renameConfigBtn.clicked.connect(lambda _, arg="rename": self.showConfigNameForm(arg))
     self.deleteConfigBtn.clicked.connect(self.deleteConfig)
     self.saveConfigNameBtn.clicked.connect(self.manageConfig)
+    self.cancelConfigNameBtn.clicked.connect(self.cancelConfigNameForm)
     self.replaceWithCurrentValuesBtn.clicked.connect(self.replaceValues)
     self.sensor1Gpio.valueChanged.connect(lambda new_value: self.gpioChanged(1, new_value))
     self.sensor2Gpio.valueChanged.connect(lambda new_value: self.gpioChanged(2, new_value))
@@ -61,6 +62,7 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
     self.configNameLabel.setVisible(True)
     self.configName.setVisible(True)
     self.saveConfigNameBtn.setVisible(True)
+    self.cancelConfigNameBtn.setVisible(True)
 
   def showConfigItems(self) -> None:
     self.configLabel.setVisible(True)
@@ -75,6 +77,7 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
     self.configNameLabel.setVisible(False)
     self.configName.setVisible(False)
     self.saveConfigNameBtn.setVisible(False)
+    self.cancelConfigNameBtn.setVisible(False)
 
   def showConfigNameForm(self, flag: str) -> None:
     self.hideConfigItems()
@@ -88,7 +91,13 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
       self.configName.setText(self.configComboBox.currentText())
       self.rename_config_flag = True
       self.new_config_flag = False
-  
+
+  def cancelConfigNameForm(self) -> None:
+    self.configName.setText("")
+    self.new_config_flag = False
+    self.rename_config_flag = False
+    self.showConfigItems()
+
   def manageConfig(self) -> None:
     # validate config name
     name = self.configName.text()
