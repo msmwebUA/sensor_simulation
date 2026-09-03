@@ -63,13 +63,14 @@ class App(QMainWindow, Ui_MainWindow):
     self.controlS4Btn.clicked.connect(lambda _: self.controlSensor(4))
     for item in [self.mainBlockItems, self.sensorRpmItems]:
       for subitem in item:
-        subitem[0].valueChanged.connect(self.pageItemsChanged)
+        subitem[0].valueChanged.connect(self.pageItemsChangedManually)
     for item in self.coefficientItems:
-      item[0].editingFinished.connect(self.pageItemsChanged)
+      item[0].editingFinished.connect(self.pageItemsChangedManually)
 
-    # flag
+    # flags
     self.manual_mode = False
     self.simulationStarted = False
+    self.block_page_items_changed = False
 
     # add listener to program exit and purge channels
       # self.purgeChannels()
@@ -210,15 +211,25 @@ class App(QMainWindow, Ui_MainWindow):
     # uncheck manual rpm checkbox
     self.manualRpmCheckBox.setChecked(False)
 
-  def pageItemsChanged(self) -> None:
+  def pageItemsChangedManually(self) -> None:
+    if self.block_page_items_changed:
+      return
     values = self.getPageItemsValues()
-    if self.settings_obj.validateSettings(values):
-      if self.settings_obj.updateCurrentSettings(self.countRevolutions(values)):
-        self.simulationBtn.setEnabled(True)
-      else:
-        self.simulationBtn.setEnabled(False)
+    if not self.settings_obj.validateSettings(values):
+      self.simulationBtn.setEnabled(False)
+      return
+    edited_values = self.countRevolutions(values)
+    if not edited_values:
+      self.simulationBtn.setEnabled(False)
+      return
+    if self.settings_obj.updateCurrentSettings(edited_values):
+      self.simulationBtn.setEnabled(True)
+      self.block_page_items_changed = True
+      try:
+        self.setPageItemsValues(self.settings_obj.current_settings, False) # false -> don't update combobox
+      finally:
+        self.block_page_items_changed = False
     else:
-      # validation failed, messages already shown during validation
       self.simulationBtn.setEnabled(False)
 
   def countRevolutions(self, values: dict) -> dict:
@@ -252,7 +263,7 @@ class App(QMainWindow, Ui_MainWindow):
           if main_block_rpm == 0:
             errors.append("Cannot calculate coefficient when main block RPM is zero")
           else:
-            # simplify fraction using gsd
+            # simplify fraction using gcd
             divisor = gcd(abs(sensor_rpm), abs(main_block_rpm))
             numerator = sensor_rpm // divisor
             denominator = main_block_rpm // divisor
@@ -322,11 +333,19 @@ class App(QMainWindow, Ui_MainWindow):
     config_id = self.configComboBox.currentData()
     if config_id:
       self.settings_obj.setCurrentConfigId(config_id, self.settings_obj.current_settings)
-      self.setPageItemsValues(self.settings_obj.current_settings, False) 
+      self.block_page_items_changed = True
+      try:
+        self.setPageItemsValues(self.settings_obj.current_settings, False) # false -> don't update combobox
+      finally:
+        self.block_page_items_changed = False
 
   # DIALOG
 
   def showSettingsDialog(self) -> None:
     dialog = SettingsDialog(self.settings_obj)
     if dialog.exec() == QDialog.Accepted:
-      self.setPageItemsValues(self.settings_obj.current_settings)
+      self.block_page_items_changed = True
+      try:
+        self.setPageItemsValues(self.settings_obj.current_settings, True) # true -> also update combobox
+      finally:
+        self.block_page_items_changed = False
