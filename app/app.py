@@ -242,21 +242,25 @@ class App(QMainWindow, Ui_MainWindow):
         # calculate sensor rpm from main block rpm and coefficient
         if self.manual_mode:
           coefficient = sensor.get("coefficient", "0/1")
+          
           try:
             numerator, denominator = map(int, coefficient.split("/"))
-            if denominator == 0:
-              errors.append("Coefficient denominator cannot be zero")
-              raise ValueError
-            # calculate result
-            result = main_block_rpm * numerator
-            # check result
-            if result % denominator != 0:
-              errors.append(f"Sensor RPM must be an integer. {main_block_rpm} * {coefficient} does not produce an integer RPM")
-              raise ValueError
-            # write result
-            sensor["rpm"] = result // denominator
           except (ValueError, AttributeError):
-            errors.append(f"Invalid coefficient format: {coefficient}. Expected format: x/y. Division by zero not allowed.")
+            errors.append(f"Invalid coefficient format: {coefficient}. Expected format: x/y")
+          continue
+          
+          if denominator == 0:
+            errors.append("Coefficient denominator cannot be zero")
+            continue
+          
+          result = main_block_rpm * numerator
+          
+          if result % denominator != 0:
+            errors.append(f"Sensor RPM must be an integer. {main_block_rpm} * {coefficient} does not produce an integer RPM")
+            continue
+
+          sensor["rpm"] = result // denominator
+
         # calculate coefficient from sensor rpm and main block rpm
         else:
           sensor_rpm = sensor.get("rpm", 0)
@@ -265,18 +269,22 @@ class App(QMainWindow, Ui_MainWindow):
           else:
             # simplify fraction using gcd
             divisor = gcd(abs(sensor_rpm), abs(main_block_rpm))
+            
             numerator = sensor_rpm // divisor
+            
             denominator = main_block_rpm // divisor
+            
             # keep denominator positive
             if denominator < 0:
               numerator *= -1
               denominator *= -1
+            
             # write result
             sensor["coefficient"] = f"{numerator}/{denominator}"
     if errors:
       for error in errors:
         messages.ConsoleMessage.append(error)
-        messages.showAlert(self, "Error", error, "critical")
+      messages.showAlert(self, "Warning", "Cannot calculate values. Check console for details", "warning")
       return None
     else:
       return edited_values
