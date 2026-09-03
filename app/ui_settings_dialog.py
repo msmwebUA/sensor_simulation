@@ -46,7 +46,7 @@ class Ui_settingsDialog(object):
         self.defaultValuesLabel.setStyleSheet(u"background-color: rgb(255, 255, 255);")
         self.replaceWithCurrentValuesBtn = QPushButton(self.defaultValuesFrame)
         self.replaceWithCurrentValuesBtn.setObjectName(u"replaceWithCurrentValuesBtn")
-        self.replaceWithCurrentValuesBtn.setGeometry(QRect(200, 113, 181, 30))
+        self.replaceWithCurrentValuesBtn.setGeometry(QRect(200, 115, 181, 30))
         self.replaceWithCurrentValuesBtn.setMaximumSize(QSize(16777215, 30))
         self.sensorGpioFrame = QFrame(self.mainFrame)
         self.sensorGpioFrame.setObjectName(u"sensorGpioFrame")

@@ -263,19 +263,19 @@
                 <widget class="QSpinBox" name="mainBlockRpm">
                  <property name="minimumSize">
                   <size>
-                   <width>0</width>
+                   <width>80</width>
                    <height>30</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
-                   <width>70</width>
+                   <width>80</width>
                    <height>16777215</height>
                   </size>
                  </property>
                  <property name="font">
                   <font>
-                   <pointsize>14</pointsize>
+                   <pointsize>12</pointsize>
                   </font>
                  </property>
                  <property name="frame">
@@ -325,9 +325,9 @@
               <widget class="QFrame" name="coefficientsChannelsFrame">
                <property name="geometry">
                 <rect>
-                 <x>10</x>
-                 <y>40</y>
-                 <width>222</width>
+                 <x>0</x>
+                 <y>45</y>
+                 <width>237</width>
                  <height>84</height>
                 </rect>
                </property>
@@ -347,7 +347,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>Ch 1</string>
+                   <string>Ch1</string>
                   </property>
                  </widget>
                 </item>
@@ -355,19 +355,19 @@
                  <widget class="QLineEdit" name="sensor1Coefficient">
                   <property name="minimumSize">
                    <size>
-                    <width>0</width>
+                    <width>70</width>
                     <height>25</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>60</width>
+                    <width>70</width>
                     <height>16777215</height>
                    </size>
                   </property>
                   <property name="font">
                    <font>
-                    <pointsize>14</pointsize>
+                    <pointsize>11</pointsize>
                    </font>
                   </property>
                  </widget>
@@ -381,7 +381,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>Ch 3</string>
+                   <string>Ch3</string>
                   </property>
                  </widget>
                 </item>
@@ -389,19 +389,19 @@
                  <widget class="QLineEdit" name="sensor3Coefficient">
                   <property name="minimumSize">
                    <size>
-                    <width>0</width>
+                    <width>70</width>
                     <height>25</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>60</width>
+                    <width>70</width>
                     <height>16777215</height>
                    </size>
                   </property>
                   <property name="font">
                    <font>
-                    <pointsize>14</pointsize>
+                    <pointsize>11</pointsize>
                    </font>
                   </property>
                  </widget>
@@ -415,7 +415,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>Ch 2</string>
+                   <string>Ch2</string>
                   </property>
                  </widget>
                 </item>
@@ -423,19 +423,19 @@
                  <widget class="QLineEdit" name="sensor2Coefficient">
                   <property name="minimumSize">
                    <size>
-                    <width>0</width>
+                    <width>70</width>
                     <height>25</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>60</width>
+                    <width>70</width>
                     <height>16777215</height>
                    </size>
                   </property>
                   <property name="font">
                    <font>
-                    <pointsize>14</pointsize>
+                    <pointsize>11</pointsize>
                    </font>
                   </property>
                  </widget>
@@ -449,7 +449,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>Ch 4</string>
+                   <string>Ch4</string>
                   </property>
                  </widget>
                 </item>
@@ -457,19 +457,19 @@
                  <widget class="QLineEdit" name="sensor4Coefficient">
                   <property name="minimumSize">
                    <size>
-                    <width>0</width>
+                    <width>70</width>
                     <height>25</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>60</width>
+                    <width>70</width>
                     <height>16777215</height>
                    </size>
                   </property>
                   <property name="font">
                    <font>
-                    <pointsize>14</pointsize>
+                    <pointsize>11</pointsize>
                    </font>
                   </property>
                  </widget>
@@ -515,8 +515,8 @@
                <property name="geometry">
                 <rect>
                  <x>10</x>
-                 <y>36</y>
-                 <width>219</width>
+                 <y>40</y>
+                 <width>221</width>
                  <height>94</height>
                 </rect>
                </property>
@@ -544,19 +544,19 @@
                  <widget class="QSpinBox" name="sensor1Rpm">
                   <property name="minimumSize">
                    <size>
-                    <width>0</width>
+                    <width>70</width>
                     <height>30</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>70</width>
+                    <width>80</width>
                     <height>16777215</height>
                    </size>
                   </property>
                   <property name="font">
                    <font>
-                    <pointsize>14</pointsize>
+                    <pointsize>12</pointsize>
                    </font>
                   </property>
                   <property name="frame">
@@ -584,19 +584,19 @@
                  <widget class="QSpinBox" name="sensor3Rpm">
                   <property name="minimumSize">
                    <size>
-                    <width>0</width>
+                    <width>70</width>
                     <height>30</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>70</width>
+                    <width>80</width>
                     <height>16777215</height>
                    </size>
                   </property>
                   <property name="font">
                    <font>
-                    <pointsize>14</pointsize>
+                    <pointsize>12</pointsize>
                    </font>
                   </property>
                   <property name="frame">
@@ -624,19 +624,19 @@
                  <widget class="QSpinBox" name="sensor2Rpm">
                   <property name="minimumSize">
                    <size>
-                    <width>0</width>
+                    <width>70</width>
                     <height>30</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>70</width>
+                    <width>80</width>
                     <height>16777215</height>
                    </size>
                   </property>
                   <property name="font">
                    <font>
-                    <pointsize>14</pointsize>
+                    <pointsize>12</pointsize>
                    </font>
                   </property>
                   <property name="frame">
@@ -664,19 +664,19 @@
                  <widget class="QSpinBox" name="sensor4Rpm">
                   <property name="minimumSize">
                    <size>
-                    <width>0</width>
+                    <width>70</width>
                     <height>30</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>70</width>
+                    <width>80</width>
                     <height>16777215</height>
                    </size>
                   </property>
                   <property name="font">
                    <font>
-                    <pointsize>14</pointsize>
+                    <pointsize>12</pointsize>
                    </font>
                   </property>
                   <property name="frame">
