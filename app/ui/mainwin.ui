@@ -814,11 +814,14 @@
                   <bold>true</bold>
                  </font>
                 </property>
+                <property name="toolTip">
+                 <string>Clear console</string>
+                </property>
                 <property name="styleSheet">
                  <string notr="true"/>
                 </property>
                 <property name="text">
-                 <string extracomment="Clear console">🆑</string>
+                 <string>🆑</string>
                 </property>
                 <property name="checkable">
                  <bool>false</bool>
