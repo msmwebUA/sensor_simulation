@@ -195,7 +195,7 @@
                <rect>
                 <x>0</x>
                 <y>44</y>
-                <width>167</width>
+                <width>184</width>
                 <height>90</height>
                </rect>
               </property>
@@ -229,7 +229,7 @@
                 <widget class="QComboBox" name="configComboBox">
                  <property name="minimumSize">
                   <size>
-                   <width>0</width>
+                   <width>120</width>
                    <height>0</height>
                   </size>
                  </property>
@@ -759,7 +759,7 @@
                 </property>
                 <property name="minimumSize">
                  <size>
-                  <width>150</width>
+                  <width>180</width>
                   <height>40</height>
                  </size>
                 </property>
@@ -812,7 +812,7 @@
                 </property>
                 <property name="minimumSize">
                  <size>
-                  <width>92</width>
+                  <width>95</width>
                   <height>40</height>
                  </size>
                 </property>
@@ -824,7 +824,7 @@
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>12</pointsize>
+                  <pointsize>11</pointsize>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -852,7 +852,7 @@
                 </property>
                 <property name="minimumSize">
                  <size>
-                  <width>92</width>
+                  <width>95</width>
                   <height>40</height>
                  </size>
                 </property>
@@ -864,7 +864,7 @@
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>12</pointsize>
+                  <pointsize>11</pointsize>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -892,7 +892,7 @@
                 </property>
                 <property name="minimumSize">
                  <size>
-                  <width>92</width>
+                  <width>95</width>
                   <height>40</height>
                  </size>
                 </property>
@@ -904,7 +904,7 @@
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>12</pointsize>
+                  <pointsize>11</pointsize>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -932,7 +932,7 @@
                 </property>
                 <property name="minimumSize">
                  <size>
-                  <width>92</width>
+                  <width>95</width>
                   <height>40</height>
                  </size>
                 </property>
@@ -944,7 +944,7 @@
                 </property>
                 <property name="font">
                  <font>
-                  <pointsize>12</pointsize>
+                  <pointsize>11</pointsize>
                   <bold>true</bold>
                  </font>
                 </property>

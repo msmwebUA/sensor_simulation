@@ -46,7 +46,8 @@ class Ui_settingsDialog(object):
         self.defaultValuesLabel.setStyleSheet(u"background-color: rgb(255, 255, 255);")
         self.replaceWithCurrentValuesBtn = QPushButton(self.defaultValuesFrame)
         self.replaceWithCurrentValuesBtn.setObjectName(u"replaceWithCurrentValuesBtn")
-        self.replaceWithCurrentValuesBtn.setGeometry(QRect(200, 110, 181, 32))
+        self.replaceWithCurrentValuesBtn.setGeometry(QRect(200, 113, 181, 30))
+        self.replaceWithCurrentValuesBtn.setMaximumSize(QSize(16777215, 30))
         self.sensorGpioFrame = QFrame(self.mainFrame)
         self.sensorGpioFrame.setObjectName(u"sensorGpioFrame")
         self.sensorGpioFrame.setGeometry(QRect(410, 10, 241, 151))
@@ -178,7 +179,7 @@ class Ui_settingsDialog(object):
 
         self.configComboBox = QComboBox(self.actionsButtonsFrame)
         self.configComboBox.setObjectName(u"configComboBox")
-        self.configComboBox.setMinimumSize(QSize(0, 0))
+        self.configComboBox.setMinimumSize(QSize(120, 0))
 
         self.horizontalLayout.addWidget(self.configComboBox)
 
@@ -218,7 +219,7 @@ class Ui_settingsDialog(object):
         self.configName = QLineEdit(self.editConfigNameFrame)
         self.configName.setObjectName(u"configName")
         self.configName.setMinimumSize(QSize(90, 0))
-        self.configName.setMaximumSize(QSize(16777215, 16777215))
+        self.configName.setMaximumSize(QSize(120, 16777215))
         self.configName.setFont(font3)
 
         self.horizontalLayout_2.addWidget(self.configName)
