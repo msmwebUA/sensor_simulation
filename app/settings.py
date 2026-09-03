@@ -188,31 +188,31 @@ class Settings:
         "name": config_name,
         "current": True,
         "main_block": {
-          "rpm": 20
+          "rpm": 100
         },
         "sensors": [
           {
             "id": 1,
             "gpio": 27,
-            "rpm": 10,
+            "rpm": 50,
             "coefficient": "1/2"
           },
           {
             "id": 2,
             "gpio": 22,
-            "rpm": 10,
+            "rpm": 50,
             "coefficient": "1/2"
           },
           {
             "id": 3,
             "gpio": 23,
-            "rpm": 10,
+            "rpm": 50,
             "coefficient": "1/2"
           },
           {
             "id": 4,
             "gpio": 24,
-            "rpm": 10,
+            "rpm": 50,
             "coefficient": "1/2"
           }
         ]
