@@ -319,6 +319,8 @@ class App(QMainWindow, Ui_MainWindow):
     for item in self.sensorRpmItems:
       item[0].setEnabled(False)
     self.manualRpmCheckBox.setEnabled(False)
+    self.settingsBtn.setEnabled(False)
+    self.clearConsoleBtn.setEnabled(False)
 
   def unablePageItems(self) -> None:
     self.configComboBox.setEnabled(True)
@@ -335,6 +337,8 @@ class App(QMainWindow, Ui_MainWindow):
         item[0].setEnabled(True)
       for item in self.sensorRpmItems:
         item[0].setEnabled(False)
+    self.settingsBtn.setEnabled(True)
+    self.clearConsoleBtn.setEnabled(True)
 
   def hideSensorControlButtons(self) -> None:
     for btn in self.sensorControlButtons:
