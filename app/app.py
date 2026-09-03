@@ -208,8 +208,6 @@ class App(QMainWindow, Ui_MainWindow):
       for item in self.sensorRpmItems:
         if item[1] == sensor["id"]:
           item[0].setValue(sensor["rpm"])
-    # uncheck manual rpm checkbox
-    self.manualRpmCheckBox.setChecked(False)
 
   def pageItemsChangedManually(self) -> None:
     if self.block_page_items_changed:
@@ -241,46 +239,36 @@ class App(QMainWindow, Ui_MainWindow):
       for sensor in config.get("sensors", []):
         # calculate sensor rpm from main block rpm and coefficient
         if self.manual_mode:
-          coefficient = sensor.get("coefficient", "0/1")
-          
-          try:
-            numerator, denominator = map(int, coefficient.split("/"))
-          except (ValueError, AttributeError):
-            errors.append(f"Invalid coefficient format: {coefficient}. Expected format: x/y")
-          continue
-          
-          if denominator == 0:
-            errors.append("Coefficient denominator cannot be zero")
-            continue
-          
-          result = main_block_rpm * numerator
-          
-          if result % denominator != 0:
-            errors.append(f"Sensor RPM must be an integer. {main_block_rpm} * {coefficient} does not produce an integer RPM")
-            continue
-
-          sensor["rpm"] = result // denominator
-
-        # calculate coefficient from sensor rpm and main block rpm
-        else:
           sensor_rpm = sensor.get("rpm", 0)
           if main_block_rpm == 0:
             errors.append("Cannot calculate coefficient when main block RPM is zero")
           else:
             # simplify fraction using gcd
             divisor = gcd(abs(sensor_rpm), abs(main_block_rpm))
-            
+            # calculate coefficient
             numerator = sensor_rpm // divisor
-            
             denominator = main_block_rpm // divisor
-            
             # keep denominator positive
             if denominator < 0:
               numerator *= -1
               denominator *= -1
-            
             # write result
             sensor["coefficient"] = f"{numerator}/{denominator}"
+        # calculate coefficient from sensor rpm and main block rpm
+        else:
+          coefficient = sensor.get("coefficient", "0/1")
+          try:
+            numerator, denominator = map(int, coefficient.split("/"))
+            if denominator == 0:
+              errors.append("Coefficient denominator cannot be zero")
+              continue
+            result = main_block_rpm * numerator
+            if result % denominator != 0:
+              errors.append(f"Sensor RPM must be an integer. {main_block_rpm} * {coefficient} does not produce an integer RPM")
+              continue
+            sensor["rpm"] = result // denominator
+          except (ValueError, AttributeError):
+            errors.append(f"Invalid coefficient format: {coefficient}. Expected format: x/y") 
     if errors:
       for error in errors:
         messages.ConsoleMessage.append(error)
