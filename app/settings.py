@@ -21,6 +21,9 @@ class Settings:
       with open(self.settings_file, "r", encoding="utf-8") as f:
         settings = json.load(f)
         if self.validateSettings(settings):
+          # first sort sensors by id (if json edited manually)
+          for config in settings.values():
+            config["sensors"] = sorted(config["sensors"], key=lambda sensor: sensor["id"])
           messages.ConsoleMessage.append(f"Settings loaded from file {self.settings_file}")
           return settings
         else:
