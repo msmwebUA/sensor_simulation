@@ -62,15 +62,9 @@ class Settings:
     root_keys = list(settings.keys())
     if any(not isinstance(key, str) or not key.isdigit() for key in root_keys):
       errors.append('Root keys in settings must be positive integers represented as strings ("1", "2", "3", etc)')
-    # else:
-    #   key_numbers = [int(key) for key in root_keys]
-    #   if any(number <= 0 for number in key_numbers):
-    #     errors.append('Root keys must start from "1"')
-    #   expected_keys = set(range(1, len(root_keys) + 1))
-    #   if set(key_numbers) != expected_keys:
-    #     errors.append('Root keys in settings must be consecutive and start from "1"')
 
     # validate configs
+    config_names = []
     for config_key, config in settings.items():
       location = f'Configuration "{config_key}"'
       if not isinstance(config, dict):
@@ -80,6 +74,7 @@ class Settings:
       name = config.get("name")
       if (not isinstance(name, str) or not name or not name.isalnum()):
        errors.append(f'{location}: "name" must not be empty and must contain letters and digits only')
+      config_names.append(name)
       # validate current
       if not isinstance(config.get("current"), bool):
         errors.append(f'{location}: "current" must be True or False')
@@ -136,6 +131,9 @@ class Settings:
       gpio_pins_set = set(gpio_pins)
       if len(gpio_pins_set) != len(gpio_pins):
         errors.append(f"{location}: GPIO pins set must contain 4 unique pins")
+    config_names_set = set(config_names)
+    if len(config_names_set) != len(config_names):
+      errors.append("Configuration names must be unique")
     # validate json
     try:
       json.dumps(settings)
