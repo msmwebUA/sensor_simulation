@@ -182,7 +182,17 @@ class SettingsDialog(QDialog, Ui_settingsDialog):
       self.reject()
 
   def save(self) -> None:
-    if self.settings_obj.saveSettings(self.modified_settings):
-      self.accept()
+    # close dialog if nothing changed
+    if self.modified_settings == self.settings_obj.saved_settings:
+      self.reject()
     else:
-      messages.showAlert(self, "Error", "Invalid settings. Save operation canceled", "critical")
+      # inform about reset on main page and ask confirmation
+      confirm = messages.showConfirmation(self, "Save changes", "This action will save changes and also reset values on main page. Continue?")
+      if not confirm:
+        return
+      else:
+        # save settings
+        if self.settings_obj.saveSettings(self.modified_settings):
+          self.accept()
+        else:
+          messages.showAlert(self, "Error", "Invalid settings. Save operation canceled", "critical")
