@@ -1,12 +1,33 @@
-### Suggest to save current settings to file on program exit (if current_settings != saved_settings)
-
 ### Install emojis pkg:
   sudo apt update
   sudo apt install fonts-noto-color-emoji -y
 
 -----------
 ### Command to create ui from ui file:
-pyside6-uic ui/mainwin.ui -o ui.py
+  pyside6-uic ui/mainwin.ui -o ui.py
 
 ### Compile static resources into py file:
-pyside6-rcc ui/resources.qrc -o resources_rc.py
+  pyside6-rcc ui/resources.qrc -o resources_rc.py
+
+#### Compile project to executable (pyinstaller) - to bundled python script:
+  pip install pyinstaller
+
+  pyinstaller --onefile --windowed \
+    --hidden-import=gpiozero.pins.lgpio \
+    --hidden-import=lgpio \
+    --collect-all lgpio \
+    --collect-all gpiozero \
+    main.py
+
+  --onefile (or -F): bundles everything into a single executable file.
+  --windowed (or -w, --noconsole): hides the background terminal window.
+
+Once the process completes successfully, PyInstaller will create a few files in your directory: 
+dist/: contains your final standalone executable file
+build/: temporary logs and build files (safe to delete after compilation)
+main.spec: configuration file used to fine-tune future builds
+
+#### Compile project to executable file (pyside6 feature, uses c++ compiler) - directly to binary:
+Note! First time needs connection to internet to install Nuitka and dependencies
+!!! Compiled with pyside6-deploy file does not work properly (does not includes lgpio lib) - use pyinstaller instead
+  pyside6-deploy main.py
