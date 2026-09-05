@@ -138,6 +138,9 @@ class App(QMainWindow, Ui_MainWindow):
     self.purgeChannels()
     self.channels_half_period = {}
     self.hideSensorControlButtons()
+    for key, channel in self.channels_active.items():
+      channel[1].setText(f"⏹️ Stop S{key}")
+    self.channels_active = {}
     self.unablePageItems()
     self.simulationBtn.setText("▶️ Start simulation")
     messages.ConsoleMessage.append(f"Simulation stopped. Elapsed time: {self.formatElapsedTime(elapsed_ms)}")
