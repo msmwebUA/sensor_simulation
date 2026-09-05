@@ -9,7 +9,12 @@ import messages
 import copy
 from math import gcd
 
+# for successful deployment into executable (include lgpio)
+import os
+os.environ["GPIOZERO_PIN_FACTORY"] = "lgpio"
+
 from gpiozero import DigitalOutputDevice
+
 
 VERSION = "1.0"
 
