@@ -100,21 +100,28 @@ class App(QMainWindow, Ui_MainWindow):
       }
       self.elapsed_timer.start()
       sensors = self.settings_obj.current_settings[self.settings_obj.getCurrentConfigId(self.settings_obj.current_settings)]["sensors"]
-      for sensor in sensors:
-        rpm = sensor["rpm"]
-        channel = DigitalOutputDevice(sensor["gpio"], active_high=True, initial_value=True)
-        # keep gpio pin's mode as object otherwise it will be collected to garbage in next iteration
-        self.channels[sensor["id"]] = channel
-        # frequency
-        frequency = rpm / 60.0
-        # time for active low and high
-        half_period = (1.0 / frequency) / 2.0
-        self.channels_half_period[sensor["id"]] = half_period
-        # run built-in blink method, infinite
-        # RPI LOW -> pin closed to GND
-        # RPI HIGH -> pin switched to 
-        channel.blink(on_time=half_period, off_time=half_period, background=True)
-        messages.ConsoleMessage.append(f"[sensor{sensor['id']}], GPIO{sensor['gpio']} -> {rpm} RPM (half period: {half_period:.4f} s)") 
+      try:
+        for sensor in sensors:
+          rpm = sensor["rpm"]
+          channel = DigitalOutputDevice(sensor["gpio"], active_high=True, initial_value=True)
+          # keep gpio pin's mode as object otherwise it will be collected to garbage in next iteration
+          self.channels[sensor["id"]] = channel
+          # frequency
+          frequency = rpm / 60.0
+          # time for active low and high
+          half_period = (1.0 / frequency) / 2.0
+          self.channels_half_period[sensor["id"]] = half_period
+          # run built-in blink method, infinite
+          # RPI LOW -> pin closed to GND
+          # RPI HIGH -> pin switched to 
+          channel.blink(on_time=half_period, off_time=half_period, background=True)
+          messages.ConsoleMessage.append(f"[sensor{sensor['id']}], GPIO{sensor['gpio']} -> {rpm} RPM (half period: {half_period:.4f} s)") 
+      except Exception as e:
+        messages.ConsoleMessage.append(f"Failed to start simulation: {e}")
+        messages.showAlert(self, "Error", f"Failed to start simulation: {e}", "critical")
+        self.simulationStop()   # roll back to a consistent state instead of leaving buttons hidden
+        self.simulationStarted = False
+        return
       self.showSensorControlButtons()
     else:
       messages.ConsoleMessage.append("Cannot start simulation: Invalid settings")
